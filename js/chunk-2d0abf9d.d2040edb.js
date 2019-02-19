@@ -1,2 +1,2 @@
 (window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0abf9d"],{1822:function(e,t,n){"use strict";n.r(t);var o=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"home"},[n("NameDeco",{attrs:{msg:"Works"}})],1)},c=[],a=n("0ccd"),s={name:"works",beforeCreate:function(){document.title="作品-Portfolio"},components:{NameDeco:a["a"]}},r=s,l=n("2877"),u=Object(l["a"])(r,o,c,!1,null,null,null);t["default"]=u.exports}}]);
-//# sourceMappingURL=chunk-2d0abf9d.d8c1cb49.js.map
+//# sourceMappingURL=chunk-2d0abf9d.d2040edb.js.map

@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d22d746"],{f820:function(e,t,n){"use strict";n.r(t);var o=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",{staticClass:"home"},[n("NameDeco",{attrs:{msg:"About Me"}})],1)},c=[],a=(n("cadf"),n("551c"),n("f751"),n("097d"),n("0ccd")),s={name:"about",beforeCreate:function(){document.title="關於我-Portfolio"},components:{NameDeco:a["a"]}},u=s,l=n("2877"),r=Object(l["a"])(u,o,c,!1,null,null,null);t["default"]=r.exports}}]);
-//# sourceMappingURL=chunk-2d22d746.4abc91d2.js.map

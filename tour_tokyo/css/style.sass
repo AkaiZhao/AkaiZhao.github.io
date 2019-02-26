@@ -63,7 +63,10 @@ nav
     transition: .5s
     z-index: 99
     padding: 12px 0
-
+    &.fix_top
+        background-color: #18232B
+        position: fixed
+        top: 0
     a
         color: $white
         +font-min
@@ -158,7 +161,7 @@ nav
     width: 100%
     height: calc(100vh - 150px)
     background-image: url('../img/00_home/home-bg.jpg')
-    background-size: 110%
+    background-size: cover
     background-repeat: no-repeat
     background-position: center
     
@@ -166,22 +169,28 @@ nav
     .container
         flex-direction: column
         align-items: center
-
+        max-width: 600px
+        height: 100%
     .home_title_block
+        width: 100%
         display: flex
         flex-direction: column
         align-items: flex-end
-        margin-top: 15%
+        margin-top: auto
         margin-bottom: 18%
 
     .title_img  
-        padding-right: 160px
+        padding-right: 14%
         margin-bottom: 10px
-
+        width: 30%
     .slogn_img
-        padding-right: 165px
+        padding-right: 14%
         margin-bottom: 10px        
-
+        width: 60%
+    .subtitle_img
+        padding-right: 0
+        margin-bottom: 10px        
+        width: 100%
     .btn
         padding: 10px 30px 
         border: 3px solid $white
@@ -273,16 +282,21 @@ nav
         display: none
 .section3
     background-color: darkblue
+    padding: 0 20px
     padding-bottom: 100px
     background-size: cover
     background-image: url("../img/03_yoko/yoko_bg.jpg")
     color: $white
     letter-spacing: 1.5
+    width: 100%
+    box-sizing: border-box
     .container
+        width: 100%
         max-width: 1140px
         overflow: hidden
         margin-top: 50px
         .card
+            width: calc(25% - 30px)
             display: flex
             flex-direction: column
             align-items: center
@@ -295,7 +309,7 @@ nav
                 .subtitle
                     color: $red
             .cover
-                width: 255px
+                width: 100%
                 height: 315px
                 margin-left: 15px
                 margin-right: 15px
@@ -305,7 +319,7 @@ nav
                     height: 315px
                     background-size: cover
                     transform: scale(1)
-                    transition: .8s ease-out
+                    transition: transform .8s ease-out
                 &:hover
                     .img
                         transform: scale(1.1)
@@ -602,6 +616,7 @@ nav
         flex-direction: column
         .full
             margin-bottom: 50px
+            display: flex
             .text_area
                 margin-top: 100px
                 float: left
@@ -610,6 +625,7 @@ nav
                 height: 100%
                 .subtitle,.subtitle_eng,.intro 
                     writing-mode: vertical-lr
+                    margin-right: 50px
                     text-align: left
                 .subtitle
                     +font-title
@@ -627,7 +643,7 @@ nav
                     margin-top: 100px
                     margin-left: 10px
                     &:nth-child(even)
-                        margin-top: 110px
+                        margin-top: 130px
             &:nth-child(2)
                 .text_area
                     .subtitle

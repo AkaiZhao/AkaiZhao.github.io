@@ -1,4 +1,4 @@
-var fes_data = [
+var fes = [
   {
     name: '新年初詣',
     date: '12/31~1/1',
@@ -36,34 +36,42 @@ var fes_data = [
   }
 ];
 
-var yoko_data = [
+var yokos = [
   {
     name: '上野阿美橫丁',
     intro:
       '位於東京上野車站與御徒町車站之間的阿美橫丁商店街，可說是自由行 旅客必造訪的購物天堂，據統計，每天大約有10萬人次造訪 阿美橫丁，接近年末期間更會增加到每天50萬人次！建議最 適合前往的阿美橫丁的時間是下午，因為太早或太晚都會錯過商店營業的時間喔!',
-    img_src: 'img/03_yoko/yoko1.jpg'
+    img_src: 'img/03_yoko/yoko1.jpg',
+    isOpen: false,
+    slide: ''
   },
   {
     name: '口琴橫丁',
     intro:
       '店舖就像口琴的簧片般小店林立，街道也由此得名。與路上行人摩肩接踵、穿梭過彷佛就要迷路似的狹窄街道後，看似充滿歡樂的店鋪就佇立在您的眼前，似乎所到之處都能聽到音樂傳來。橫丁街內不僅有餐飲店，還有雜貨店、沙龍、占卜等，即使逛一整天也不會膩。',
-    img_src: 'img/03_yoko/yoko2.jpg'
+    img_src: 'img/03_yoko/yoko2.jpg',
+    isOpen: false,
+    slide: ''
   },
   {
     name: '惠比壽橫丁',
     intro:
       '開張於2008年的5月。這條巷子很小，一不小心就會錯過入口。進入小路後兩邊開著肉壽司，鐵板燒，烤肉串，關東煮，葡萄酒，燒肉，韓國料理，西班牙料理等，一共13家獨一無二的個性餐店都在這裡。本以為惠比壽只有高級且耀眼的店鋪，所以來到這裡的時候發現與我的即有印像不同，感到很驚訝。',
-    img_src: 'img/03_yoko/yoko3.jpg'
+    img_src: 'img/03_yoko/yoko3.jpg',
+    isOpen: false,
+    slide: ''
   },
   {
     name: '回憶橫丁',
     intro:
       '西口防護欄的沿路上，林立著長屋建築（一種房屋形式）連綿的酒館街。戰後不久的1946年，由於當時食材不足，並非想買就能買到，因此出現多家經營較容易向外國駐軍買到的牛豬內臟類的燒烤店，現如今也還有多家雞肉燒烤店和內臟類燒烤店。街上除了酒館之外，還有定食屋和金券店（專賣各式票券）等店舖。',
-    img_src: 'img/03_yoko/yoko4.jpg'
+    img_src: 'img/03_yoko/yoko4.jpg',
+    isOpen: false,
+    slide: ''
   }
 ];
 
-var ramen_data = [
+var ramens = [
   {
     name: '池袋',
     intro:
@@ -90,7 +98,7 @@ var ramen_data = [
   }
 ];
 
-var trad_data = [
+var trads = [
   {
     intro:
       '壽司在現今世界中也大受歡迎。能品嚐到當季鮮美海鮮的握壽司，醋飯上灑滿配料的散壽司等，看起來也賞心悅目，是日本最引以自豪的傳統美食。',
@@ -123,14 +131,13 @@ var trad_data = [
   }
 ];
 
-var event_data = [
+var events = [
   {
     name: '忍者參上',
     eng: 'Ninja',
     intro_1: '換上忍者裝體驗飛鏢射擊。',
     intro_2: '還有體術、武器術入門、變身鎧甲武士等體驗課程。',
     img_src: 'img/08_trad_events/event-1.jpg'
-    // "deco" : "
   },
   {
     name: '和服漫步',
@@ -138,7 +145,6 @@ var event_data = [
     intro_1: '無須準備即可前往體驗試穿和服，',
     intro_2: '同時享受漫步在街上的樂趣。',
     img_src: 'img/08_trad_events/event-3.jpg'
-    // "deco" : ""
   },
   {
     name: '茶道體驗',
@@ -146,7 +152,6 @@ var event_data = [
     intro_1: '靜謐的日本橋茶室，讓人完全想像不到此地是東京鬧區。',
     intro_2: '除了正統的個人茶道體驗之外，還有茶會體驗。',
     img_src: 'img/08_trad_events/event-5.jpg'
-    // "deco" : ""
   }
 ];
 // vue
@@ -154,56 +159,70 @@ var event_data = [
 var vm1 = new Vue({
   el: '#vue_all',
   data: {
-    fes: fes_data,
-    yokos: yoko_data,
-    ramens: ramen_data,
-    trads: trad_data,
-    events: event_data
+    fes,
+    yokos,
+    ramens,
+    trads,
+    events
+  },
+  mounted() {
+    this.DeviceWatcher();
+    window.addEventListener('resize', this.DeviceWatcher);
+  },
+  methods: {
+    yokoDetailHandler(i) {
+      this.yokos[i].isOpen = !this.yokos[i].isOpen;
+      if (this.yokos[i].isOpen) {
+        for (let j = 0, l = this.yokos.length; j < l; j++) {
+          this.yokos[j].slide = j > i ? 'slide-right' : 'slide-left';
+        }
+        yokos[i].slide = 'slide-show';
+      } else {
+        for (let j = 0, l = this.yokos.length; j < l; j++) {
+          this.yokos[j].slide = '';
+        }
+      }
+    },
+    DeviceWatcher(i) {
+      let windoeWidth = window.innerWidth;
+
+      if (windoeWidth > 990) {
+        window.removeEventListener('scroll', this.scrollHandler);
+        window.addEventListener('scroll', this.scrollHandler);
+      } else {
+        window.removeEventListener('scroll', this.scrollHandler);
+        window.addEventListener('scroll', this.scrollHandler);
+      }
+    },
+    scrollHandler() {
+      let home = document.querySelector('.home');
+      let homeHeight = home.clientHeight - 10;
+      let scrollTop = window.scrollY;
+      let nav = document.querySelector('.nav');
+
+      if (scrollTop > homeHeight) {
+        nav.classList.add('fix_top');
+      } else {
+        nav.classList.remove('fix_top');
+      }
+      if (scrollTop > 100 && scrollTop < homeHeight) {
+        nav.style.top = '-50px';
+      } else {
+        nav.style.top = '';
+      }
+    }
+  },
+  watch: {
+    yokos: {
+      handler(val, oldVal) {
+        console.log(val);
+        // this.yokos = val;
+      },
+      deep: true
+    }
   }
 });
 
-// yoko的動作
-$('.section3 .card').click(function() {
-  // 文字出現
-  $(this)
-    .find('.intro')
-    .toggleClass('open');
-  $(this)
-    .find('.subtitle')
-    .toggleClass('subtitle_change');
-});
-// 點擊第一塊的動作 1對齊 234往又跑
-$('.section3 .card:nth-child(1)').click(function() {
-  $('.section3 .img').toggleClass('m_0');
-  $(this).toggleClass('slide-show');
-  $('.section3 .card:nth-child(2)').toggleClass('slide-right');
-  $('.section3 .card:nth-child(3)').toggleClass('slide-right');
-  $('.section3 .card:nth-child(4)').toggleClass('slide-right');
-});
-// 點擊第一塊的動作 1往左 2對齊 34往又跑
-$('.section3 .card:nth-child(2)').click(function() {
-  $('.section3 .img').toggleClass('m_0');
-  $(this).toggleClass('slide-show');
-  $('.section3 .card:nth-child(1)').toggleClass('slide-left');
-  $('.section3 .card:nth-child(3)').toggleClass('slide-right');
-  $('.section3 .card:nth-child(4)').toggleClass('slide-right');
-});
-// 點擊第一塊的動作 12往左 3對齊 4往又跑
-$('.section3 .card:nth-child(3)').click(function() {
-  $('.section3 .img').toggleClass('m_0');
-  $(this).toggleClass('slide-show');
-  $('.section3 .card:nth-child(1)').toggleClass('slide-left');
-  $('.section3 .card:nth-child(2)').toggleClass('slide-left');
-  $('.section3 .card:nth-child(4)').toggleClass('slide-right');
-});
-// 點擊第一塊的動作 123往左 4對齊
-$('.section3 .card:nth-child(4)').click(function() {
-  $('.section3 .img').toggleClass('m_0');
-  $(this).toggleClass('slide-show');
-  $('.section3 .card:nth-child(1)').toggleClass('slide-left');
-  $('.section3 .card:nth-child(2)').toggleClass('slide-left');
-  $('.section3 .card:nth-child(3)').toggleClass('slide-left');
-});
 // swiper
 var swiper = new Swiper('#yoko', {
   slidesPerView: 1,
@@ -251,163 +270,59 @@ var trad_swiper = new Swiper('.trad', {
   }
 });
 
-// nav
-$(window).resize(function() {
-  var wid = $(window).width();
-  var home_height = $('.home').outerHeight() - 10;
-
-  if (wid > 1000) {
-    $(window).scroll(function() {
-      var scrollTop = $(window).scrollTop();
-
-      if (scrollTop > home_height) {
-        //nav show ,postition fixed,change top and bg-color
-        $('.nav').css('background-color', '#18232B');
-        $('.nav').css('top', '0px');
-        $('.nav').css('position', 'fixed');
-      } else if (scrollTop > 100) {
-        $('.nav').css('top', '-50px');
-      } else {
-        $('.nav').css('position', 'absolute');
-        $('.nav').css('background-color', 'rgba(0,0,0,0)');
-        $('.nav').css('top', '40px');
-      }
-    });
-  } else {
-    $(window).scroll(function() {
-      var scrollTop = $(window).scrollTop();
-
-      if (scrollTop > home_height) {
-        //nav show ,postition fixed,change top and bg-color
-        $('.nav').css('background-color', '#18232B');
-        $('.nav').css('top', '0px');
-        $('.nav').css('position', 'fixed');
-      } else if (scrollTop > 100) {
-        $('.nav').css('top', '-50px');
-      } else {
-        $('.nav').css('position', 'absolute');
-        $('.nav').css('background-color', 'rgba(0,0,0,0)');
-        $('.nav').css('top', '0px');
-      }
-    });
-  }
-});
-var wid = $(window).width();
-var home_height = $('.home').outerHeight() - 10;
-
-if (wid > 760) {
-  $(window).scroll(function() {
-    var scrollTop = $(window).scrollTop();
-
-    if (scrollTop > home_height) {
-      //nav show ,postition fixed,change top and bg-color
-      $('.nav').css('background-color', '#18232B');
-      $('.nav').css('top', '0px');
-      $('.nav').css('position', 'fixed');
-    } else if (scrollTop > 100) {
-      $('.nav').css('top', '-50px');
-    } else {
-      $('.nav').css('position', 'absolute');
-      $('.nav').css('background-color', 'rgba(0,0,0,0)');
-      $('.nav').css('top', '40px');
-    }
-  });
-  $('.home .subtitle_img').attr('src', 'img/00_home/home_subtitle.png');
-  $(window).mousemove(function(event) {
-    var x = event.pageX;
-    var y = event.pageY;
-    var introx = x - $('.section5').offset().left;
-    var introy = y - $('.section5').offset().top;
-    $('.section5 .bottom').css(
-      'transform',
-      'translate(' + introx / 200 + 'px,' + introy / 100 + 'px)'
-    );
-  });
-
-  $(window).mousemove(function(event) {
-    var x2 = event.pageX;
-    var y2 = event.pageY;
-    var introx2 = x2 - $('.home').offset().left;
-    var introy2 = y2 - $('.home').offset().top;
-    $('.home').css(
-      'background-position',
-      introx2 / 50 - 50 + 'px' + ' ' + (introy2 / 30 - 50) + 'px'
-    );
-  });
-} else {
-  $(window).scroll(function() {
-    var scrollTop = $(window).scrollTop();
-
-    if (scrollTop > home_height) {
-      //nav show ,postition fixed,change top and bg-color
-      $('.nav').css('background-color', '#18232B');
-      $('.nav').css('top', '0px');
-      $('.nav').css('position', 'fixed');
-    } else if (scrollTop > 100) {
-      $('.nav').css('top', '-50px');
-    } else {
-      $('.nav').css('position', 'absolute');
-      $('.nav').css('background-color', 'rgba(0,0,0,0)');
-      $('.nav').css('top', '0px');
-    }
-  });
-  $('.home .subtitle_img').attr('src', 'img/00_home/home_subtitle.svg');
-}
-
 AOS.init();
 
 // 點logo回到首頁
 $('.logo').on('click', function(e) {
   $('html, body').animate(
     {
-      scrollTop: 0 // 只需修改此處
+      scrollTop: 0
     },
     750
-  ); // 750是滑動的時間，單位為毫秒
+  );
   e.preventDefault();
 });
 // 點東京趣事到
 $('.attractions').on('click', function(e) {
   $('html, body').animate(
     {
-      scrollTop: $('.section2').offset().top // 只需修改此處
+      scrollTop: $('.section2').offset().top
     },
     750
-  ); // 750是滑動的時間，單位為毫秒
+  );
   e.preventDefault();
 });
 // 點美食到拉麵
 $('.food').on('click', function(e) {
   $('html, body').animate(
     {
-      scrollTop: $('.section5').offset().top // 只需修改此處
+      scrollTop: $('.section5').offset().top
     },
     750
-  ); // 750是滑動的時間，單位為毫秒
+  );
   e.preventDefault();
 });
 // 點魅力到活動
 $('.events').on('click', function(e) {
   $('html, body').animate(
     {
-      scrollTop: $('.section8').offset().top // 只需修改此處
+      scrollTop: $('.section8').offset().top
     },
     750
-  ); // 750是滑動的時間，單位為毫秒
+  );
   e.preventDefault();
 });
-// 點開始到
 $('.home a.btn').on('click', function(e) {
+  e.preventDefault();
   $('html, body').animate(
     {
-      scrollTop: $('.section2').offset().top // 只需修改此處
+      scrollTop: $('.section2').offset().top
     },
     750
-  ); // 750是滑動的時間，單位為毫秒
-  e.preventDefault();
+  );
 });
 
-$('btn.toggle').on('click', function() {
+$('.toggle').on('click', function() {
   $('.nav_phone').toggleClass('height_full');
   $('.bar').toggleClass('click_color');
   $('.bar1').toggleClass('click');

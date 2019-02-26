@@ -20,11 +20,11 @@
       <nav class="nav">
         <div class="container">
           <a class="logo" href=""><span>JP</span>TOURISM</a>
-          <btn class="toggle">
+          <div class="toggle">
             <div class="bar bar1"></div>
             <div class="bar bar2"></div>
             <div class="bar bar3"></div>
-          </btn>
+          </div>
           <ul>
             <li>
               <a class="attractions" href=""><span>東京</span>趣事</a>
@@ -97,7 +97,12 @@
           讓我們一同前往小巷盡頭的另一個世界——萬眾矚目的橫丁吧！
         </p>
         <div class="container">
-          <div class="card" v-for="yoko in yokos">
+          <div
+            class="card"
+            :class="yoko.slide"
+            @click="yokoDetailHandler(i)"
+            v-for="(yoko,i) in yokos"
+          >
             <div class="cover">
               <div
                 class="img"
@@ -105,13 +110,20 @@
               ></div>
             </div>
             <div class="text_area">
-              <div class="intro">{{ yoko.intro }}</div>
+              <div class="intro" :class="{open:yoko.isOpen}">
+                {{ yoko.intro }}
+              </div>
             </div>
-            <div class="subtitle">{{ yoko.name }}</div>
+            <div class="subtitle_change" v-show="yoko.isOpen">
+              {{ yoko.name }}
+            </div>
+            <div class="subtitle" v-show='!yoko.isOpen'>
+              {{ yoko.name }}
+            </div>
           </div>
         </div>
       </section>
-      <section_2 class="section3_2">
+      <section class="section3_2">
         <h2 class="title">橫丁商圈</h2>
         <p class="subtitle">
           讓我們一同前往小巷盡頭的另一個世界<br />萬眾矚目的橫丁吧！
@@ -129,7 +141,7 @@
             </div>
           </div>
         </div>
-      </section_2>
+      </section>
       <section class="section4">
         <h2 class="title">古蹟巡禮</h2>
         <div class="subtitle">
@@ -429,7 +441,7 @@
             <img src="img/facebook.svg" /><img src="img/twitter.svg" />
           </div>
           <div class="copyright">
-            Copyright © 2012 JPTOURISM Inc. All rights reserved
+            本網站供練習使用，若有侵權請告知，謝謝!
           </div>
         </div>
       </footer>

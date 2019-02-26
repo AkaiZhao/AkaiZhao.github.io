@@ -1,0 +1,691 @@
+
+// 顏色定義 
+$red: #CC3635
+$white: #ffffff
+$dark_blue: rgba(28, 36, 61, 1)
+$grey: #F7F5F2
+// mixin
+@mixin font-title
+    font-size: 48px
+    font-weight: bold
+    text-align: center
+    // font-family: 思源黑體
+@mixin font-subtitle
+    font-size: 32px
+    font-weight: 600
+    text-align: center
+@mixin font-intro
+    font-size: 20px
+    font-weight: 0
+    text-align: center
+    font-family: 思源黑體
+@mixin font-min
+    font-size: 18px
+
+*
+    font-family: 微軟正黑體
+body
+    margin: 0
+h1 , h2 , h3 ,p
+    margin: 0
+.container
+    max-width: 1140px
+    margin: 0 auto
+    display: flex
+    justify-content: space-between
+a
+    text-decoration: none
+    display: block
+section
+    padding: 75px 0
+    display: flex
+    flex-direction: column
+    align-items: center
+.title
+    +font-title
+    margin: 0
+    margin-bottom: 20px
+    color: $red
+.intro
+    +font-intro
+    // margin-bottom: 40px
+    font-weight: 0
+    letter-spacing: 1.4
+.subtitle
+    +font-subtitle
+    letter-spacing: 1.4
+
+nav
+    position: absolute
+    top: 20px
+    width: 100%
+    max-width: 100vw
+    transition: .5s
+    z-index: 99
+    padding: 12px 0
+
+    a
+        color: $white
+        +font-min
+        font-weight: bold
+        transition: .4s
+        &:hover
+            color: $red
+            span
+                color: $white
+
+    span 
+        color: $red
+    ul 
+        list-style: none
+        display: flex
+        margin: 0
+    li 
+        margin-left: 30px
+        position: relative
+        .dash_line
+            position: absolute
+            bottom: -8px
+            right: 0
+            width: 0%
+            height: 2px
+            background-color: $white
+            transition: .4s    
+        &:hover
+            .dash_line
+                left: 0
+                width: 100%
+                background-color: $red
+.nav_phone  
+    background-color: rgba($dark_blue,.95)
+    margin-top: 30px
+    width: 100%
+    height: 0vh
+    overflow: hidden
+    position: fixed
+    z-index: 80
+    transition: .3s
+    span 
+        color: $red
+    ul 
+        list-style: none
+        display: flex
+        flex-direction: column
+        margin: 20px 20px
+        padding: 0
+    li 
+        margin-left: 0px
+        position: relative
+        padding: 10px
+    a
+        color: $white
+        +font-min
+        font-weight: bold
+        transition: .4s
+        &:hover
+            color: $red
+            span
+                color: $white
+.height_full
+    height: 100vh
+
+    span 
+        color: $red
+    ul 
+        list-style: none
+        display: flex
+        flex-direction: column
+        margin: 20px 20px
+        padding: 0
+    li 
+        margin-left: 0px
+        position: relative
+        padding: 10px
+        .dash_line
+            position: absolute
+            bottom: -8px
+            right: 0
+            width: 0%
+            height: 2px
+            background-color: $white
+            transition: .4s    
+        &:hover
+            .dash_line
+                left: 0
+                width: 100%
+                background-color: $red 
+.home
+    width: 100%
+    height: calc(100vh - 150px)
+    background-image: url('../img/00_home/home-bg.jpg')
+    background-size: 110%
+    background-repeat: no-repeat
+    background-position: center
+    
+
+    .container
+        flex-direction: column
+        align-items: center
+
+    .home_title_block
+        display: flex
+        flex-direction: column
+        align-items: flex-end
+        margin-top: 15%
+        margin-bottom: 18%
+
+    .title_img  
+        padding-right: 160px
+        margin-bottom: 10px
+
+    .slogn_img
+        padding-right: 165px
+        margin-bottom: 10px        
+
+    .btn
+        padding: 10px 30px 
+        border: 3px solid $white
+        border-radius: 5px
+        color: $white
+        margin-bottom: 40px
+
+    .btn span
+        transition: .3s
+        
+    .btn:hover
+        background-color: $white
+        color: $dark_blue
+        font-weight: bold
+        span
+            border-bottom: 2px solid $dark_blue
+    .arrow_down
+        animation: arrow-down 2s 1.6s infinite both linear
+.section2
+    background-color: $grey
+    padding-bottom: 0
+    .container
+        margin-top: 40px
+        flex-direction: column
+        position: relative
+    .timeline
+        position: absolute
+        left: 50%
+        width: 3px
+        height: 100%
+        background-color: $red
+    .row
+        display: flex
+        justify-content: space-between
+        margin: 30px 0
+        .col
+            display: flex
+            flex-direction: column
+            align-items: flex-end
+            width: calc(50% - 30px)
+            .subtitle
+                margin: 0
+                margin-top: 20px
+                position: relative
+                &:before
+                    content: ""
+                    position: absolute
+                    top: 50%
+                    right: -39px
+                    transform: translateY(-50%)
+                    border-radius: 50%
+                    height: 16px
+                    width: 16px
+                    background-color: $red
+            .date
+                +font-intro
+                margin: 0
+                margin-top: 5px
+            .intro
+                text-align: justify
+                line-height: 1.7
+                letter-spacing: 1.3
+                margin-top: 10px
+            .cover
+                width: 100%
+                height: 100%
+                overflow: hidden
+            img
+                width: 100%
+                transform: scale(1.2)
+                transition: .5s
+                &:hover
+                    transform: scale(1)                
+        .col:nth-child(2)
+            justify-content: flex-end
+    .row:nth-child(odd)
+        flex-direction: row-reverse
+        .col
+            align-items: flex-start
+            .subtitle
+                &:before
+                    left: -37px
+    .bottom
+        width: 100%
+        // margin-bottom: -10px
+        box-shadow: 0 60px 80px #233249
+        
+    .phone
+        display: none
+.section3
+    background-color: darkblue
+    padding-bottom: 100px
+    background-size: cover
+    background-image: url("../img/03_yoko/yoko_bg.jpg")
+    color: $white
+    letter-spacing: 1.5
+    .container
+        max-width: 1140px
+        overflow: hidden
+        margin-top: 50px
+        .card
+            display: flex
+            flex-direction: column
+            align-items: center
+            justify-content: center
+            transition: .3s
+            position: relative
+            cursor: pointer
+            // overflow: hidden
+            &:hover
+                .subtitle
+                    color: $red
+            .cover
+                width: 255px
+                height: 315px
+                margin-left: 15px
+                margin-right: 15px
+                overflow: hidden
+                .img
+                    width: 255px
+                    height: 315px
+                    background-size: cover
+                    transform: scale(1)
+                    transition: .8s ease-out
+                &:hover
+                    .img
+                        transform: scale(1.1)
+            .intro
+                font-size: 0
+                width: 200px
+                text-align: left
+                position: absolute
+                top: 80px
+                left: 110%
+                transition: .2s 
+                margin-top: 10px
+                letter-spacing: 1.8
+                line-height: 1.8
+                transform: scale(0)
+            .open
+                font-size: 18px
+                width: 650px
+                display: block 
+                transform: scale(1)
+            .subtitle
+                font-size: 22px
+                transition: .2s
+                color: $white
+                margin-top: 10px
+            .subtitle_change
+                font-size: 36px
+                width: 650px
+                text-align: left
+                position: absolute
+                top: 10px
+                left: 110%
+                color: $red
+                padding-bottom: 10px
+                border-bottom: 3px solid $red
+        .slide-left,.slide-right
+            pointer-events: none
+        .card:nth-child(1).slide-left
+            transform: translateX(-285px)
+            z-index: -2
+        .card:nth-child(1).slide-show
+            transform: translateX(40px)
+        .card:nth-child(2).slide-left
+            transform: translateX(-580px) scale(.99)
+            z-index: -1
+        .card:nth-child(2).slide-show
+            transform: translateX(-250px)
+        .card:nth-child(2).slide-right
+            transform: translateX(885px) scale(.98)
+            z-index: 2
+        .card:nth-child(3).slide-left
+            transform: translateX(-895px) scale(.98)
+            z-index: 1
+        .card:nth-child(3).slide-show
+            transform: translateX(-530px)
+        .card:nth-child(3).slide-right
+            transform: translateX(585px) scale(.99)
+            z-index: 1           
+        .card:nth-child(4).slide-show
+            transform: translateX(-820px)
+        .card:nth-child(4).slide-right
+            transform: translateX(300px)
+.section3_2
+    display: none
+
+.section4
+    .subtitle
+        margin-bottom: 20px
+    .swiper-container
+        width: 100%
+        height: 850px
+        .swiper-slide
+            text-align: center
+            display: flex
+            justify-content: center
+            align-items: center
+            position: relative
+            .bg
+                width: 100%
+                position: absolute
+            .text_area
+                position: absolute
+                color: #fff
+                bottom: 100px
+                .intro
+                    margin-top: 50px
+        .swiper-button-next
+            right: 60px
+        .swiper-button-prev
+            left: 60px
+        .swiper-pagination
+            top: 98%
+.section4_2
+    display: none
+    
+.section5
+    padding-bottom: 400px
+    position: relative
+    overflow: hidden
+    .container
+    .card
+        margin-top: 50px
+        width: calc((100% - 60px)/3)
+        display: flex
+        flex-direction: column
+        align-items: center
+        position: relative
+        box-shadow: 2px 2px 8px #999
+        background-color: #fff
+        padding-bottom: 100px
+        
+        .img
+            width: 100%
+            margin-bottom: 10px
+        .subtitle
+            color: $red
+            margin-bottom: 20px
+            margin: 0 10px
+        .intro
+            margin: 0 15px
+            text-align: justify
+        a
+            background-color: $red
+            +font-min
+            color: $white
+            position: absolute
+            bottom: 20px
+            width: 170px
+            padding: 8px 30px 
+            img
+                position: absolute
+                bottom: 10px
+                right: 30px
+                transition: .5s
+            span
+                transition: .2s
+            &:hover
+                img
+                    right: 20px
+                span
+                    border-bottom: 2px solid $white
+    .bottom
+        position: absolute
+        bottom: 0
+        z-index: -3
+
+.section6
+    background-color: #F19483
+    
+    .container
+        margin-top: 50px
+        justify-content: space-between
+        width: 100%
+        .col-xl
+            display: flex
+            flex-direction: column
+            width: 50%
+            .row
+                display: flex
+                margin: 30px 0
+                height: 176px
+                justify-content: space-between
+                box-shadow: 2px 2px 10px #b84d3b
+                border-bottom: 2px solid #333
+                background-color: $grey
+                .col-sm                      
+                    .intro
+                        margin: 20px 0
+                    .min
+                        +font-min
+                        padding: 0 30px 
+                        text-align: center
+                        font-weight: bold
+                .subtitle
+                    border-bottom: 2px solid $red
+                    margin: 0 100px
+            .row.name
+                height: 50px
+                align-items: center
+                box-shadow: 0 0 0 0
+                border: none
+                background-color: rgba(0,0,0,0)
+                .col-sm
+                    width: 100%
+        .col-xl:nth-child(odd)
+            margin-right: 15px
+        .col-xl:nth-child(even)
+            margin-left: 15px
+.section7
+    .row
+        height: 594px
+        width: 100%
+        display: flex
+        margin-top: 80px
+        .img_area
+            position: relative
+            width: 55%
+            max-width: 900px
+            height: 100%
+            overflow: hidden
+            .swiper-container
+                width: 100%
+                height: 650px
+                .swiper-slide
+                    text-align: center
+                    font-size: 14px
+                    background: #fff
+                    height: 80%
+                    display: flex
+                    justify-content: center
+                    align-items: center
+                img
+                    width: 100%
+                .swiper-pagination
+                    top: 90% !important
+                .swiper-pagination-progressbar .swiper-pagination-progressbar-fill
+                    background: $red
+        .text_area
+            flex-grow: 1
+            height: 100%
+            position: relative
+            &:before
+                content: ""
+                width: 63.5px
+                height: 80px
+                position: absolute
+                background-color: $red
+                top: 50%
+                transform: translate(-70%,-50%)
+                z-index: 2
+                clip-path: polygon(0% 50%,100% 0%,100% 100%)
+                animation: arrow-left 3s linear infinite  -.2s
+            
+            .text
+                margin: 0 auto
+                width: 380px
+                padding: 0 10px
+                height: 100%
+                display: flex
+                flex-direction: column
+                align-items: center
+                justify-content: center
+                position: relative
+                background-position:  center
+                background-repeat: no-repeat
+                background-size: 100%
+            .title
+                width: 110px
+                height: auto
+                margin: 0
+            .line
+                height: 3px
+                width: 100%
+                background-color: #b2b2b2
+                margin: 30px 0
+            .intro
+                text-align: left
+            .btn
+                position: absolute
+                width: 100%
+                border: 2px solid #eee
+                display: block
+                color: #CC3635
+                text-decoration: none
+                padding: 8px 0
+                font-weight: bold
+                bottom: 0px
+                img
+                    position: absolute
+                    bottom: 12px
+                    right: 100px
+                    transition: .8s
+                span
+                    margin-left: 50px
+                    transition: .5s
+                &:hover
+                    span
+                        border-bottom: 2px solid $red
+                    img
+                        right: 50px
+        &:nth-child(even)
+            .text_area
+                &:before
+                    right: 0
+                    transform: translate(70%, -50%) rotate(180deg) 
+                    animation-name: arrow-right
+    .row:nth-child(even)
+        flex-direction: row-reverse
+.section8
+    background-color: $grey
+    overflow-x: hidden
+    .container
+        // position: relative
+        flex-direction: column
+        .full
+            margin-bottom: 50px
+            .text_area
+                margin-top: 100px
+                float: left
+                display: flex
+                width: 100px
+                height: 100%
+                .subtitle,.subtitle_eng,.intro 
+                    writing-mode: vertical-lr
+                    text-align: left
+                .subtitle
+                    +font-title
+                    background-color: #32bbe1 
+                    height: 300px
+                    padding: 15px 10px
+                    color: $white
+
+                .subtitle_eng
+                    +font-min
+                    font-weight: bold
+                    margin: 70px 20px
+                    letter-spacing: 3px
+                .intro 
+                    margin-top: 100px
+                    margin-left: 10px
+                    &:nth-child(even)
+                        margin-top: 110px
+            &:nth-child(2)
+                .text_area
+                    .subtitle
+                        background-color: #ee6886
+            &:nth-child(3)
+                .text_area
+                    .subtitle
+                        background-color: #8dc61e 
+        .img_area
+            margin-top: 160px
+            img
+                float: right
+                width: 70%
+                margin-top: 40px
+            
+            
+
+footer
+    background-color: #000
+    padding: 8px 0
+    .container
+        align-items: center
+    img
+        width: 40px
+        margin-right: 20px
+        border-radius: 3px
+    .copyright
+        +font-min
+        color: $white
+@keyframes arrow-down 
+    0%
+        opacity: 1
+        transform: translate(0, 0) scale(1)
+    60%
+        opacity: 0.4
+        transform: translate(0, 80%) scale(.9)
+    100%
+        opacity: 0
+        transform: translate(0, 100%) scale(.9)
+
+
+@keyframes arrow-right
+    0%
+        opacity: 1
+        transform: translate(0%, -50%) rotate(180deg)
+    50%
+        opacity: 0.4
+        transform: translate(80%, -50%) rotate(180deg)
+    100%
+        opacity: 0.0
+        transform: translate(110%, -50%) rotate(180deg)
+@keyframes arrow-left
+    0%
+        opacity: 1
+        transform: translate(-0%, -50%) 
+    50%
+        opacity: 0.4
+        transform: translate(-80%, -50%)
+    100%
+        opacity: 0.0
+        transform: translate(-110%, -50%)

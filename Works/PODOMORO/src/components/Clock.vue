@@ -5,35 +5,62 @@
       <circle class="outer" cx="50" cy="50" r="42.5" />
       <circle class="fill" ref="circle" cx="50" cy="50" r="42.5" />
     </svg>
+    <h1 class="clock-timer circle">{{min}}:{{sec}}</h1>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      isTimer: false,
+      isTimer: true,
       currentTime: 0,
-      time: 10,
-      timer: "",
+      time: 1 * 60,
+      min: "25",
+      sec: "00",
       state: ""
     };
   },
   mounted() {
-    // this.run();
+    this.min = `${
+      Math.floor(this.time / 60) < 10
+        ? "0" + Math.floor(this.time / 60).toString()
+        : Math.floor(this.time / 60)
+    }`;
   },
   methods: {
     run() {
+      if (this.currentTime == this.time) {
+        return;
+      }
       this.state = "play";
       this.timer = setInterval(() => {
         this.currentTime += 1;
         this.$refs.circle.style["stroke-dashoffset"] =
-          270 - (270 / this.time) * this.currentTime;
+          42.5 * 2 * 3.14 - ((42.5 * 2 * 3.14) / this.time) * this.currentTime;
+        if (this.$refs.circle.style["stroke-dashoffset"] < 0) {
+          this.$refs.circle.style["stroke-dashoffset"] = 0;
+        }
         if (this.currentTime === this.time) this.pause();
       }, 1000);
     },
     pause() {
       clearInterval(this.timer);
       this.state = "pause";
+    }
+  },
+  watch: {
+    currentTime(val) {
+      let t = this.time - val;
+      this.min = `${
+        Math.floor(t / 60) < 10
+          ? "0" + Math.floor(t / 60).toString()
+          : Math.floor(t / 60)
+      }`;
+      this.sec = `${
+        Math.floor(t % 60) < 10
+          ? "0" + Math.floor(t % 60).toString()
+          : Math.floor(t % 60)
+      }`;
     }
   }
 };
@@ -48,16 +75,9 @@ export default {
   fill: none;
   stroke: #ea5548;
   stroke-width: 15px;
-  stroke-dasharray: 270;
-  stroke-dashoffset: 270;
-  // animation: circle-draw 2s linear infinite;
+  stroke-dasharray: calc(42.5 * 2 * 3.14);
+  stroke-dashoffset: calc(42.5 * 2 * 3.14);
 }
-// @keyframes circle-draw {
-//   100% {
-//     stroke-dashoffset: 0;
-//   }
-// }
-
 $clock-size: 300px;
 $primary: #ea5548;
 .clock {
@@ -69,6 +89,14 @@ $primary: #ea5548;
   // margin-top: 22%;
   width: $clock-size;
   height: $clock-size;
+  &-timer {
+    width: 100%;
+    height: 100%;
+    line-height: $clock-size;
+    text-align: center;
+    font-size: 40px;
+    color: #333333;
+  }
   &-static {
     width: 100%;
     height: 100%;

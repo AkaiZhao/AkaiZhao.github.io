@@ -11,18 +11,27 @@
         </li>
       </ul>
       <div class="lists" v-if="tasks.length">
-        <div class="list" v-for="(t,i) in tasks" :key="i">
+        <div
+          class="list"
+          :class="{'list-show':t.showDetails}"
+          v-show="!t.isDone"
+          v-for="(t,ti) in tasks"
+          :key="ti"
+        >
           <div class="list-top">
-            <div class="list-mark list-done"></div>
+            <div class="list-mark" :class="{'list-done':t==currentTask}"></div>
             <div class="list-info">
               <h5 class="list-info-title">{{t.title}}</h5>
               <div class="list-info-estimated">
-                <div class="list-info-estimated-icon list-info-estimated-icon done"></div>
-                <div class="list-info-estimated-icon list-info-estimated-icon unstarted"></div>
-                <div class="list-info-estimated-icon list-info-estimated-icon undone"></div>
+                <div
+                  class="list-info-estimated-icon list-info-estimated-icon"
+                  v-for="(e,ei) in t.estimated"
+                  :key="ei"
+                  :class="{unstarted:e==1,done:e==2,undone:e==3}"
+                ></div>
               </div>
             </div>
-            <a href="#" class="list-active">
+            <a href="#" class="list-active" @click.prevent="showDetail(ti)">
               <div class="list-active-dot"></div>
             </a>
           </div>
@@ -49,9 +58,26 @@
 </template>
 <script>
 export default {
+  methods: {
+    selectTask(task) {
+      this.$store.dispatch("selectTask", task);
+    },
+    showDetail(index) {
+      let res = this.tasks;
+      let detailState = res[index].showDetails;
+      for (let j = 0; j < res.length; j++) {
+        res[j].showDetails = false;
+      }
+      res[index].showDetails = detailState ? false : true;
+      this.$store.dispatch("showDetail", res);
+    }
+  },
   computed: {
     tasks() {
       return this.$store.state.tasks;
+    },
+    currentTask() {
+      return this.$store.state.currentTask;
     }
   }
 };
@@ -85,15 +111,25 @@ export default {
     }
   }
 }
+.lists {
+  height: 650px;
+  overflow-y: auto;
+}
 .list {
   background-color: #414141;
-
   margin-bottom: 1px;
   position: relative;
   transition: 0.3s;
-  &:hover {
-    z-index: 1;
-    box-shadow: 0 0 5px rgba(#ffffff, 0.5);
+  height: 50px;
+  overflow: hidden;
+  &-show {
+    height: 245px;
+  }
+  &:not(.list-show) {
+    &:hover {
+      z-index: 1;
+      box-shadow: 0 0 5px rgba(#ffffff, 0.5);
+    }
   }
   &-top {
     display: flex;
@@ -151,7 +187,7 @@ export default {
   &-active {
     position: absolute;
     right: 0;
-    height: 100%;
+    height: 50px;
     width: 40px;
     &-dot {
       margin: 23.5px 18.5px;

@@ -1,11 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     tasks: [],
-    playingTask: {},
+    currentTask: {},
     currentActive: 0
   },
   actions: {
@@ -17,6 +19,12 @@ export default new Vuex.Store({
     },
     addNewTask({ commit }, status) {
       commit("ADDNEWTASK", status);
+    },
+    selectTask({ commit }, status) {
+      commit("SELECTTASK", status);
+    },
+    showDetail({ commit }, status) {
+      commit("SELECTTASK", status);
     }
   },
   mutations: {
@@ -25,6 +33,12 @@ export default new Vuex.Store({
     },
     ADDNEWTASK(state, status) {
       state.tasks.push(status);
+    },
+    SELECTTASK(state, status) {
+      state.currentTask = status;
+    },
+    SHOWDETAIL(state, status) {
+      state.tasks = status;
     }
   }
 });

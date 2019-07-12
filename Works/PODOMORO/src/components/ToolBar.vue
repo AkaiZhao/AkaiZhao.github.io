@@ -34,8 +34,6 @@ export default {
   },
   methods: {
     changeActive(act) {
-      console.log(act);
-
       this.$store.dispatch("changeActive", act);
     }
   },

@@ -28,6 +28,7 @@ export default {
     return {
       tomato: new Array(10),
       tomatoCount: 0,
+      estimated: [],
       title: "",
       titleAlert: false,
       estimatedAlert: false
@@ -54,12 +55,17 @@ export default {
         }
         return;
       }
+      this.estimated = [];
+      for (let i = 0; i < this.tomatoCount; i++) {
+        this.estimated[i] = 1;
+      }
 
       this.$store.dispatch("addNewTask", {
         title: this.title,
-        estimated: this.tomatoCount,
+        estimated: this.estimated,
         showDetails: false,
-        isDone: false
+        isDone: false,
+        time: Math.floor(new Date())
       });
     }
   }

@@ -1,8 +1,35 @@
 <template>
   <div id="app">
     <div class="left">
-      <clock-cmp></clock-cmp>
-      <p class="task">
+      <h1 class="left-title">My First Task</h1>
+      <div class="list-info-estimated left-estimated">
+        <div class="list-info-estimated-icon unstarted"></div>
+        <div class="list-info-estimated-icon unstarted"></div>
+        <div class="list-info-estimated-icon unstarted"></div>
+        <div class="list-info-estimated-icon unstarted"></div>
+      </div>
+      <clock-cmp :status="playStatus"></clock-cmp>
+      <div class="action">
+        <a
+          href="#"
+          class="action-botton action-botton-play"
+          @click.prevent="changeStatus('play')"
+          :class="{ active: playStatus == 'play' }"
+        ></a>
+        <a
+          href="#"
+          class="action-botton action-botton-pause"
+          @click.prevent="changeStatus('pause')"
+          :class="{ active: playStatus == 'pause' }"
+        ></a>
+        <a
+          href="#"
+          class="action-botton action-botton-reset"
+          @click.prevent="changeStatus('reset')"
+          :class="{ active: playStatus == 'reset' }"
+        ></a>
+      </div>
+      <p class="task task-complete">
         You don’t have any task now,
         <br />please add task first!
       </p>
@@ -13,11 +40,11 @@
     <div class="right">
       <tool-bar></tool-bar>
       <transition name="slide">
-        <div class="settings" v-show="currentActive>=0">
+        <div class="settings" v-show="currentActive >= 0">
           <keep-alive>
-            <add-new-task v-if="currentActive===0"></add-new-task>
-            <task-list v-if="currentActive===1"></task-list>
-            <anyalytics-report v-if="currentActive===2"></anyalytics-report>
+            <add-new-task v-if="currentActive === 0"></add-new-task>
+            <task-list v-if="currentActive === 1"></task-list>
+            <anyalytics-report v-if="currentActive === 2"></anyalytics-report>
           </keep-alive>
         </div>
       </transition>
@@ -34,7 +61,16 @@ import AnyalyticsReport from "./components/AnyalyticsReport.vue";
 export default {
   name: "app",
   components: { ClockCmp, ToolBar, AddNewTask, TaskList, AnyalyticsReport },
-  methods: {},
+  methods: {
+    changeStatus(status) {
+      this.playStatus = status;
+    }
+  },
+  data() {
+    return {
+      playStatus: "pause"
+    };
+  },
   computed: {
     currentActive() {
       return this.$store.state.currentActive;
@@ -44,6 +80,18 @@ export default {
 </script>
 
 <style lang="scss">
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
 :root {
   --clock-time: 1s;
 }
@@ -77,6 +125,9 @@ p {
   padding: 20px;
   box-sizing: border-box;
   display: flex;
+  @media (max-width: 800px) {
+    padding: 0;
+  }
 }
 .circle {
   border-radius: 50%;
@@ -85,6 +136,50 @@ p {
   background: #eaeaea;
   flex-grow: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &-title {
+    margin-top: 100px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  &-estimated {
+    margin: 0 auto;
+    margin-bottom: 50px;
+  }
+}
+.action {
+  display: flex;
+  justify-content: center;
+  margin: 50px;
+  &-botton {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background: #fcfcfc;
+    border-radius: 50%;
+    margin: 0 37.5px;
+    background-size: cover;
+    &-play {
+      background-image: url("~@/assets/icons/start_gray.svg");
+      &.active {
+        background-image: url("~@/assets/icons/start_red.svg");
+      }
+    }
+    &-pause {
+      background-image: url("~@/assets/icons/pause_gray.svg");
+      &.active {
+        background-image: url("~@/assets/icons/pause_red.svg");
+      }
+    }
+    &-reset {
+      background-image: url("~@/assets/icons/reset_gray.svg");
+      &.active {
+        background-image: url("~@/assets/icons/reset_red.svg");
+      }
+    }
+  }
 }
 .right {
   background-color: #333333;
@@ -92,6 +187,7 @@ p {
   display: flex;
 }
 .task {
+  display: none;
   text-align: center;
   position: absolute;
   bottom: 150px;
@@ -110,41 +206,7 @@ footer {
     color: #333333;
   }
 }
-.close {
-  width: 90px;
-  height: 50px;
-  position: absolute;
-  bottom: 40px;
-  left: -30px;
-  border-radius: 25px 5px 5px 25px;
-  background-color: #fcfcfc;
-  display: flex;
-  transition: background-color 0.2s;
-  &:hover {
-    background-color: rgb(212, 212, 212);
-  }
-  &::after {
-    content: "";
 
-    width: 20px;
-    height: 14px;
-    margin-top: 18px;
-    margin-left: 13px;
-    display: block;
-    background-image: url("~@/assets/icons/arrow.svg");
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-  &::before {
-    content: "";
-    width: 25px;
-    height: 25px;
-    margin-top: 12.5px;
-    margin-left: 12px;
-    display: block;
-    background-image: url("~@/assets/icons/tomato_small_color.svg");
-  }
-}
 .settings {
   width: 512px;
   height: 100%;
@@ -156,6 +218,10 @@ footer {
   height: 100%;
   box-sizing: border-box;
   padding: 0 33px;
+  box-sizing: border-box;
+  @media (max-width: 800px) {
+    width: 90vw;
+  }
   h1 {
     font-size: 20px;
     letter-spacing: 1px;

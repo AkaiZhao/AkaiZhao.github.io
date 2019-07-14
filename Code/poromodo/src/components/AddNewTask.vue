@@ -5,12 +5,7 @@
       TASK TITLE
       <span v-if="err.title" class="alert">Incorrect Task Title</span>
     </h4>
-    <input
-      class="setting-input"
-      type="text"
-      v-model="taskData.title"
-      @input="err.title = false"
-    />
+    <input class="setting-input" type="text" v-model="taskData.title" @input="err.title = false" />
     <h4 class="setting-title">
       ESTIMATED TOMOTO
       <span v-if="err.estimated" class="alert">Incorrect Estimated Tomato</span>
@@ -41,7 +36,7 @@ export default {
         title: "",
         estimated: [],
         showDetails: false,
-        isDone: 0
+        countdown: 1500
       }
     };
   },

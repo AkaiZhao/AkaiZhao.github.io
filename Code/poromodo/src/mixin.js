@@ -10,8 +10,6 @@ export default {
      */
     taskControl(data, count, action = 2) {
       let err = {};
-      console.log(data, count);
-
       if (!data.title || !count) {
         if (!data.title) err.title = true;
         if (!count) err.estimated = true;

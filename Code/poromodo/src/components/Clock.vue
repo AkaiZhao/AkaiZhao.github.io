@@ -1,11 +1,11 @@
 <template>
-  <div class="clock circle">
-    <h1 class="clock-static circle" v-if="!isTimer">PODOMORO</h1>
-    <svg class="clock-svg" v-else viewBox="0 0 100 100">
+  <div class="clock circle" :class="{'clock-abs':!currentTask}">
+    <h1 class="clock-static circle" v-if="!currentTask">PODOMORO</h1>
+    <svg class="clock-svg" v-if="currentTask" viewBox="0 0 100 100">
       <circle class="outer" cx="50" cy="50" r="42.5" />
       <circle class="fill" ref="circle" cx="50" cy="50" r="42.5" />
     </svg>
-    <h1 class="clock-timer circle">{{ min }}:{{ sec }}</h1>
+    <h1 class="clock-timer circle" v-if="currentTask">{{ min }}:{{ sec }}</h1>
   </div>
 </template>
 <script>
@@ -14,61 +14,94 @@ export default {
   data() {
     return {
       isTimer: true,
-      currentTime: 0,
-      time: 25 * 60,
       min: "25",
-      sec: "00",
-      state: ""
+      sec: "00"
     };
   },
+  computed: {
+    currentTask() {
+      return this.$store.state.currentTask;
+    }
+  },
   mounted() {
-    this.min = `${
-      Math.floor(this.time / 60) < 10
-        ? "0" + Math.floor(this.time / 60).toString()
-        : Math.floor(this.time / 60)
-    }`;
+    this.setViewTime(this.currentTask.countdown);
   },
   methods: {
+    setViewTime(time) {
+      if (!time || !this.$refs.circle) return;
+      this.min = `${
+        Math.floor(time / 60) < 10
+          ? "0" + Math.floor(time / 60).toString()
+          : Math.floor(time / 60)
+      }`;
+      this.sec = `${
+        Math.floor(time % 60) < 10
+          ? "0" + Math.floor(time % 60).toString()
+          : Math.floor(time % 60)
+      }`;
+
+      this.$refs.circle.style["stroke-dashoffset"] =
+        42.5 * 2 * 3.15 - ((42.5 * 2 * 3.15) / 1500) * (1500 - time);
+    },
     play() {
-      if (this.currentTime == this.time) {
-        return;
-      }
-      this.state = "play";
+      if (!this.currentTask.countdown) return;
+      this.startTask();
       this.timer = setInterval(() => {
-        this.currentTime += 1;
-        this.$refs.circle.style["stroke-dashoffset"] =
-          42.5 * 2 * 3.14 - ((42.5 * 2 * 3.14) / this.time) * this.currentTime;
-        if (this.$refs.circle.style["stroke-dashoffset"] < 0) {
+        this.$store.dispatch("countDown");
+        if (!this.currentTask.countdown) {
+          this.pause();
           this.$refs.circle.style["stroke-dashoffset"] = 0;
         }
-        if (this.currentTime === this.time) this.pause();
       }, 1000);
     },
     pause() {
       clearInterval(this.timer);
-      this.state = "pause";
+    },
+    startTask() {
+      for (let index = 0; index < this.currentTask.estimated.length; index++) {
+        if (this.currentTask.estimated[index] == 3) return;
+        if (this.currentTask.estimated[index] == 1) {
+          this.$store.dispatch("changeTaskEstimated", {
+            index,
+            state: 3
+          });
+          return;
+        }
+      }
     }
   },
   watch: {
     status(val) {
       this[val]();
-      // switch(event){
-      //   case 'play':
-      //     this.play()
-      // }
     },
-    currentTime(val) {
-      let t = this.time - val;
-      this.min = `${
-        Math.floor(t / 60) < 10
-          ? "0" + Math.floor(t / 60).toString()
-          : Math.floor(t / 60)
-      }`;
-      this.sec = `${
-        Math.floor(t % 60) < 10
-          ? "0" + Math.floor(t % 60).toString()
-          : Math.floor(t % 60)
-      }`;
+    currentTask(val) {
+      if (val && this.$refs.circle)
+        this.$refs.circle.style["stroke-dashoffset"] = 42.5 * 2 * 3.15;
+    },
+    "currentTask.countdown"(val) {
+      this.setViewTime(val);
+      if (val == 0) {
+        this.pause();
+        for (
+          let index = 0;
+          index < this.currentTask.estimated.length;
+          index++
+        ) {
+          if (this.currentTask.estimated[index] == 3) {
+            this.$store.dispatch("changeTaskEstimated", {
+              index,
+              state: 2
+            });
+            let count = 0;
+            for (let j = 0; j < this.currentTask.estimated.length; j++)
+              if (this.currentTask.estimated == 2) count++;
+            console.log(this.currentTask.estimated, count, index);
+
+            if (index == count) this.$store.dispatch("doneTask");
+            return;
+          }
+        }
+      }
     }
   }
 };
@@ -83,22 +116,23 @@ export default {
   fill: none;
   stroke: #ea5548;
   stroke-width: 15px;
-  stroke-dasharray: calc(42.5 * 2 * 3.14);
-  stroke-dashoffset: calc(42.5 * 2 * 3.14);
+  stroke-dasharray: calc(42.5 * 2 * 3.15);
+  stroke-dashoffset: calc(42.5 * 2 * 3.15);
 }
 $clock-size: 300px;
 $primary: #ea5548;
 .clock {
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-
   width: 50vw;
   height: 50vw;
   max-width: $clock-size;
   max-height: $clock-size;
   position: relative;
+  &-abs {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   &-timer {
     position: absolute;
     top: 50%;

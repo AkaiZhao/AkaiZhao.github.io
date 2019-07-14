@@ -1,44 +1,69 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import createPersistedState from "vuex-persistedstate";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     tasks: [],
-    currentTask: {},
+    currentTask: '',
+    finishedTasks: [],
     currentActive: 0
   },
   actions: {
-    changeActive({ commit }, status) {
-      commit("CHANGEACTIVE", status);
+    changeActive({ commit }, state) {
+      commit('CHANGEACTIVE', state);
     },
-    selectEstimated({ commit }, status) {
-      commit("CHANGEACTIVE", status);
+    setCurrentTask({ commit }, state) {
+      commit('SETCURRENTTASK', state);
     },
-    addNewTask({ commit }, status) {
-      commit("ADDNEWTASK", status);
+
+    addNewTask({ commit }, state) {
+      if (!this.state.currentTask) {
+        commit('SETCURRENTTASK', state);
+      }
+      commit('ADDNEWTASK', state);
     },
-    selectTask({ commit }, status) {
-      commit("SELECTTASK", status);
+    changeTaskEstimated({ commit }, state) {
+      let arr = this.state.currentTask.estimated;
+      arr[state.index] = state.state;
+      commit('CHANGETASKESTIMATED', { arr });
     },
-    showDetail({ commit }, status) {
-      commit("SELECTTASK", status);
+    doneTask({ commit }) {
+      Vue.set(this.state.currentTask, 'date', new Date().toDateString());
+      commit('DONETASK');
+    },
+    showDetail({ commit }, state) {
+      commit('SELECTTASK', state);
+    },
+    countDown({ commit }) {
+      commit('COUNTDOWN');
     }
   },
   mutations: {
-    CHANGEACTIVE(state, status) {
-      state.currentActive = status;
+    CHANGEACTIVE(state, page) {
+      state.currentActive = page;
     },
-    ADDNEWTASK(state, status) {
-      state.tasks.push(status);
+    SETCURRENTTASK(state, task) {
+      state.currentTask = task;
     },
-    SELECTTASK(state, status) {
-      state.currentTask = status;
+    ADDNEWTASK(state, task) {
+      state.tasks.push(task);
     },
-    SHOWDETAIL(state, status) {
-      state.tasks = status;
+    CHANGETASKESTIMATED(state, status) {
+      Vue.set(state.currentTask, 'estimated', status.arr);
+    },
+    DONETASK(state) {
+      state.finishedTasks.push(state.currentTask);
+      state.tasks.splice(0, 1);
+      state.currentTask = '';
+    },
+    SHOWDETAIL(state, isShow) {
+      state.tasks = isShow;
+    },
+    COUNTDOWN(state) {
+      state.currentTask.countdown--;
     }
   }
 });

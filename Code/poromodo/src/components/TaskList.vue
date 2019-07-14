@@ -4,35 +4,22 @@
     <div class="table">
       <ul class="tags">
         <li class="tag">
-          <a
-            href="#"
-            :class="{ active: !currentTag }"
-            @click.prevent="currentTag = 0"
-            >TO DO</a
-          >
+          <a href="#" :class="{ active: !currentTag }" @click.prevent="currentTag = 0">TO DO</a>
         </li>
         <li class="tag">
-          <a
-            href="#"
-            :class="{ active: currentTag }"
-            @click.prevent="currentTag = 1"
-            >DONE</a
-          >
+          <a href="#" :class="{ active: currentTag }" @click.prevent="currentTag = 1">DONE</a>
         </li>
       </ul>
-      <div class="lists" v-if="tasks.length">
+      <div class="lists">
         <div
           class="list"
           :class="{ 'list-show': t.showDetails }"
-          v-show="t.isDone == currentTag"
+          v-show="currentTag==0"
           v-for="(t, ti) in tasks"
-          :key="ti"
+          :key="ti*Math.random()"
         >
           <div class="list-top">
-            <div
-              class="list-mark"
-              :class="{ 'list-done': t == currentTask }"
-            ></div>
+            <div class="list-mark" :class="{ 'list-done': t == currentTask }"></div>
             <div class="list-info">
               <h5 class="list-info-title">{{ t.title }}</h5>
               <div class="list-info-estimated">
@@ -40,7 +27,7 @@
                   class="list-info-estimated-icon"
                   v-for="(e, ei) in t.estimated"
                   v-show="e"
-                  :key="ei"
+                  :key="ei*Math.random()"
                   :class="{ unstarted: e == 1, done: e == 2, undone: e == 3 }"
                 ></div>
               </div>
@@ -57,17 +44,35 @@
               <div
                 class="list-detail-tomato"
                 :class="{ 'list-detail-tomato-active': a }"
-                v-for="a in estimated"
-                :key="a"
+                v-for="(a,ai) in estimated"
+                :key="ai*Math.random()"
               ></div>
             </div>
             <div class="list-detail-buttons">
-              <a href="#" class="list-detail-button list-detail-button-archive"
-                >ARCHIVE</a
-              >
-              <a href="#" class="list-detail-button list-detail-button-save"
-                >SAVE</a
-              >
+              <a href="#" class="list-detail-button list-detail-button-archive">ARCHIVE</a>
+              <a href="#" class="list-detail-button list-detail-button-save">SAVE</a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="list"
+          :class="{ 'list-show': t.showDetails }"
+          v-show="currentTag==1"
+          v-for="(t, ti) in finishedTasks"
+          :key="ti*Math.random()"
+        >
+          <div class="list-top">
+            <div class="list-mark" :class="{ 'list-done': t == currentTask }"></div>
+            <div class="list-info">
+              <h5 class="list-info-title">{{ t.title }}</h5>
+              <div class="list-info-estimated">
+                <div
+                  class="list-info-estimated-icon done"
+                  v-for="(e, ei) in t.estimated"
+                  v-show="e"
+                  :key="ei*Math.random()"
+                ></div>
+              </div>
             </div>
           </div>
         </div>
@@ -100,9 +105,6 @@ export default {
     changeTaskTitle(index) {
       this.title = this.tasks[index].title;
     },
-    selectTask(task) {
-      this.$store.dispatch("selectTask", task);
-    },
     showDetail(index) {
       let res = this.tasks;
       let detailState = res[index].showDetails;
@@ -120,6 +122,9 @@ export default {
     },
     currentTask() {
       return this.$store.state.currentTask;
+    },
+    finishedTasks() {
+      return this.$store.state.finishedTasks;
     }
   }
 };

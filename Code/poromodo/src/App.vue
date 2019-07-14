@@ -1,15 +1,18 @@
 <template>
   <div id="app">
     <div class="left">
-      <h1 class="left-title">My First Task</h1>
-      <div class="list-info-estimated left-estimated">
-        <div class="list-info-estimated-icon unstarted"></div>
-        <div class="list-info-estimated-icon unstarted"></div>
-        <div class="list-info-estimated-icon unstarted"></div>
-        <div class="list-info-estimated-icon unstarted"></div>
+      <h1 class="left-title" v-if="currentTask">{{currentTask.title}}</h1>
+      <div class="list-info-estimated left-estimated" v-if="currentTask">
+        <div
+          class="list-info-estimated-icon"
+          v-for="(e,i) in currentTask.estimated"
+          :key="i"
+          v-show="e"
+          :class="{ unstarted: e == 1, done: e == 2, undone: e == 3 }"
+        ></div>
       </div>
       <clock-cmp :status="playStatus"></clock-cmp>
-      <div class="action">
+      <div class="action" v-if="currentTask">
         <a
           href="#"
           class="action-botton action-botton-play"
@@ -29,7 +32,7 @@
           :class="{ active: playStatus == 'reset' }"
         ></a>
       </div>
-      <p class="task task-complete">
+      <p class="task task-complete" v-if="!currentTask">
         You don’t have any task now,
         <br />please add task first!
       </p>
@@ -61,19 +64,37 @@ import AnyalyticsReport from "./components/AnyalyticsReport.vue";
 export default {
   name: "app",
   components: { ClockCmp, ToolBar, AddNewTask, TaskList, AnyalyticsReport },
-  methods: {
-    changeStatus(status) {
-      this.playStatus = status;
-    }
-  },
   data() {
     return {
       playStatus: "pause"
     };
   },
+  mounted() {
+    if (this.tasks.length && !this.currentTask) this.setCurrentTask();
+  },
   computed: {
     currentActive() {
       return this.$store.state.currentActive;
+    },
+    tasks() {
+      return this.$store.state.tasks;
+    },
+    currentTask() {
+      return this.$store.state.currentTask;
+    }
+  },
+  methods: {
+    changeStatus(status) {
+      this.playStatus = status;
+    },
+    setCurrentTask() {
+      this.$store.dispatch("setCurrentTask", this.tasks[0]);
+    }
+  },
+  watch: {
+    currentTask(val) {
+      !val && this.setCurrentTask();
+      this.changeStatus("pause");
     }
   }
 };
@@ -187,7 +208,6 @@ p {
   display: flex;
 }
 .task {
-  display: none;
   text-align: center;
   position: absolute;
   bottom: 150px;

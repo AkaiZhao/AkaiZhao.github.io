@@ -58,7 +58,7 @@
           class="list"
           :class="{ 'list-show': t.showDetails }"
           v-show="currentTag==1"
-          v-for="(t, ti) in finishedTasks"
+          v-for="(t, ti) in doneTasks"
           :key="ti*Math.random()"
         >
           <div class="list-top">
@@ -123,8 +123,8 @@ export default {
     currentTask() {
       return this.$store.state.currentTask;
     },
-    finishedTasks() {
-      return this.$store.state.finishedTasks;
+    doneTasks() {
+      return this.$store.state.doneTasks;
     }
   }
 };

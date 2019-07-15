@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     setViewTime(time) {
-      if (!time || !this.$refs.circle) return;
+      if (time == undefined) return;
       this.min = `${
         Math.floor(time / 60) < 10
           ? "0" + Math.floor(time / 60).toString()
@@ -39,12 +39,10 @@ export default {
           ? "0" + Math.floor(time % 60).toString()
           : Math.floor(time % 60)
       }`;
-
       this.$refs.circle.style["stroke-dashoffset"] =
         42.5 * 2 * 3.15 - ((42.5 * 2 * 3.15) / 1500) * (1500 - time);
     },
     play() {
-      if (!this.currentTask.countdown) return;
       this.startTask();
       this.timer = setInterval(() => {
         this.$store.dispatch("countDown");
@@ -55,6 +53,7 @@ export default {
       }, 1000);
     },
     pause() {
+      this.$store.dispatch("changePlayState", "pause");
       clearInterval(this.timer);
     },
     startTask() {
@@ -79,9 +78,12 @@ export default {
         this.$refs.circle.style["stroke-dashoffset"] = 42.5 * 2 * 3.15;
     },
     "currentTask.countdown"(val) {
-      this.setViewTime(val);
+      this.$nextTick(() => {
+        this.setViewTime(val);
+      });
       if (val == 0) {
         this.pause();
+        this.$store.dispatch("finishStep");
         for (
           let index = 0;
           index < this.currentTask.estimated.length;
@@ -92,12 +94,6 @@ export default {
               index,
               state: 2
             });
-            let count = 0;
-            for (let j = 0; j < this.currentTask.estimated.length; j++)
-              if (this.currentTask.estimated == 2) count++;
-            console.log(this.currentTask.estimated, count, index);
-
-            if (index == count) this.$store.dispatch("doneTask");
             return;
           }
         }

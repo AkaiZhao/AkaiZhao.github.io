@@ -40,7 +40,7 @@
         <p>PODOMORO</p>
       </footer>
     </div>
-    <div class="right">
+    <div class="right" :class="{'right-abs':currentActive >= 0}">
       <tool-bar></tool-bar>
       <transition name="slide">
         <div class="settings" v-show="currentActive >= 0">
@@ -64,11 +64,6 @@ import AnyalyticsReport from "./components/AnyalyticsReport.vue";
 export default {
   name: "app",
   components: { ClockCmp, ToolBar, AddNewTask, TaskList, AnyalyticsReport },
-  data() {
-    return {
-      playStatus: "pause"
-    };
-  },
   mounted() {
     if (this.tasks.length && !this.currentTask) this.setCurrentTask();
   },
@@ -81,11 +76,19 @@ export default {
     },
     currentTask() {
       return this.$store.state.currentTask;
+    },
+    playStatus() {
+      return this.$store.state.playStatus;
     }
+  },
+  created() {
+    if (localStorage.getItem("version") !== "1.1") localStorage.clear();
+    localStorage.setItem("version", "1.1");
   },
   methods: {
     changeStatus(status) {
-      this.playStatus = status;
+      if (this.currentTask.countdown <= 0) return;
+      this.$store.dispatch("changePlayState", status);
     },
     setCurrentTask() {
       this.$store.dispatch("setCurrentTask", this.tasks[0]);
@@ -93,8 +96,10 @@ export default {
   },
   watch: {
     currentTask(val) {
-      !val && this.setCurrentTask();
-      this.changeStatus("pause");
+      if (!val) {
+        this.setCurrentTask();
+        this.changeStatus("pause");
+      }
     }
   }
 };
@@ -106,7 +111,7 @@ export default {
 }
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -172,8 +177,10 @@ p {
 }
 .action {
   display: flex;
-  justify-content: center;
-  margin: 50px;
+  justify-content: space-between;
+  margin: 50px 0;
+  width: 100%;
+  max-width: 375px;
   &-botton {
     display: block;
     width: 50px;
@@ -182,6 +189,9 @@ p {
     border-radius: 50%;
     margin: 0 37.5px;
     background-size: cover;
+    @media (max-width: 800px) {
+      margin: 0 20px;
+    }
     &-play {
       background-image: url("~@/assets/icons/start_gray.svg");
       &.active {
@@ -206,6 +216,14 @@ p {
   background-color: #333333;
   position: relative;
   display: flex;
+  @media (max-width: 800px) {
+    &-abs {
+      position: absolute;
+      left: 0;
+      height: 100%;
+      top: 0;
+    }
+  }
 }
 .task {
   text-align: center;

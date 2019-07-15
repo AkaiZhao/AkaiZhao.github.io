@@ -36,7 +36,7 @@ export default {
         title: "",
         estimated: [],
         showDetails: false,
-        countdown: 1500
+        countdown: 5
       }
     };
   },

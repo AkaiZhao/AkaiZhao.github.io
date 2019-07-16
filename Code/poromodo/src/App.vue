@@ -56,36 +56,28 @@
 </template>
 
 <script>
-import ClockCmp from "./components/Clock.vue";
-import ToolBar from "./components/ToolBar.vue";
-import AddNewTask from "./components/AddNewTask.vue";
-import TaskList from "./components/TaskList.vue";
-import AnyalyticsReport from "./components/AnyalyticsReport.vue";
+import { mapState } from "vuex";
 export default {
-  name: "app",
-  components: { ClockCmp, ToolBar, AddNewTask, TaskList, AnyalyticsReport },
+  components: {
+    ClockCmp: () => import("./components/Clock.vue"),
+    ToolBar: () => import("./components/ToolBar.vue"),
+    AddNewTask: () => import("./components/AddNewTask.vue"),
+    TaskList: () => import("./components/TaskList.vue"),
+    AnyalyticsReport: () => import("./components/AnyalyticsReport.vue")
+  },
+  computed: mapState(["currentActive", "tasks", "currentTask", "playStatus"]),
+  created() {
+    this.checkVersion();
+  },
   mounted() {
     if (this.tasks.length && !this.currentTask) this.setCurrentTask();
   },
-  computed: {
-    currentActive() {
-      return this.$store.state.currentActive;
-    },
-    tasks() {
-      return this.$store.state.tasks;
-    },
-    currentTask() {
-      return this.$store.state.currentTask;
-    },
-    playStatus() {
-      return this.$store.state.playStatus;
-    }
-  },
-  created() {
-    if (localStorage.getItem("version") !== "1.1") localStorage.clear();
-    localStorage.setItem("version", "1.1");
-  },
   methods: {
+    checkVersion() {
+      if (localStorage.getItem("version") === "1.1") return;
+      localStorage.clear();
+      localStorage.setItem("version", "1.1");
+    },
     changeStatus(status) {
       if (this.currentTask.countdown <= 0) return;
       this.$store.dispatch("changePlayState", status);
@@ -96,10 +88,9 @@ export default {
   },
   watch: {
     currentTask(val) {
-      if (!val) {
-        this.setCurrentTask();
-        this.changeStatus("pause");
-      }
+      if (val) return;
+      this.setCurrentTask();
+      this.changeStatus("pause");
     }
   }
 };

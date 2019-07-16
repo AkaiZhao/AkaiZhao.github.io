@@ -15,6 +15,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -29,17 +30,13 @@ export default {
       ]
     };
   },
+  computed: mapState(["currentActive"]),
   mounted() {
     this.icons[this.currentActive].class.active = true;
   },
   methods: {
     changeActive(act) {
-      this.$store.dispatch("changeActive", act);
-    }
-  },
-  computed: {
-    currentActive() {
-      return this.$store.state.currentActive;
+      this.$store.commit("CHANGEACTIVE", act);
     }
   },
   watch: {

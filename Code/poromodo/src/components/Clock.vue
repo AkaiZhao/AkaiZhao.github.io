@@ -9,64 +9,84 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["status"],
   data() {
     return {
       isTimer: true,
       min: "25",
-      sec: "00"
+      sec: "00",
+      perimeter: 42.5 * 6.3,
+      totalTime: 2,
+      breakTime: 2,
+      breakCountdown: 2
     };
   },
-  computed: {
-    currentTask() {
-      return this.$store.state.currentTask;
-    }
-  },
+  computed: mapState(["currentTask"]),
   mounted() {
     this.setViewTime(this.currentTask.countdown);
   },
   methods: {
-    setViewTime(time) {
+    setViewTime(time, totalTime = 5) {
       if (time == undefined) return;
-      this.min = `${
-        Math.floor(time / 60) < 10
-          ? "0" + Math.floor(time / 60).toString()
-          : Math.floor(time / 60)
-      }`;
-      this.sec = `${
-        Math.floor(time % 60) < 10
-          ? "0" + Math.floor(time % 60).toString()
-          : Math.floor(time % 60)
-      }`;
+      let m = Math.floor(time / 60).toString(),
+        s = Math.floor(time % 60).toString();
+      this.min = m < 10 ? "0" + m : m;
+      this.sec = s < 10 ? "0" + s : s;
       this.$refs.circle.style["stroke-dashoffset"] =
-        42.5 * 2 * 3.15 - ((42.5 * 2 * 3.15) / 1500) * (1500 - time);
+        (time * this.perimeter) / totalTime;
     },
     play() {
       this.startTask();
       this.timer = setInterval(() => {
         this.$store.dispatch("countDown");
-        if (!this.currentTask.countdown) {
-          this.pause();
-          this.$refs.circle.style["stroke-dashoffset"] = 0;
-        }
+        if (this.currentTask.countdown) return;
+        this.pause();
+        this.$refs.circle.style["stroke-dashoffset"] = 0;
       }, 1000);
     },
-    pause() {
-      this.$store.dispatch("changePlayState", "pause");
+    pause(isBreak) {
+      if (!isBreak) this.$store.dispatch("changePlayState", "pause");
       clearInterval(this.timer);
     },
     startTask() {
+      this.$refs.circle.style.stroke = null;
       for (let index = 0; index < this.currentTask.estimated.length; index++) {
-        if (this.currentTask.estimated[index] == 3) return;
-        if (this.currentTask.estimated[index] == 1) {
-          this.$store.dispatch("changeTaskEstimated", {
+        if (this.currentTask.estimated[index] == 3) return; //if running return
+        if (this.currentTask.estimated[index] == 1)
+          return this.$store.dispatch("changeTaskEstimated", {
             index,
             state: 3
           });
-          return;
+      }
+    },
+    finishStep() {
+      this.pause();
+      for (let index = 0; index < this.currentTask.estimated.length; index++) {
+        if (this.currentTask.estimated[index] == 3) {
+          this.$store.dispatch("changeTaskEstimated", {
+            index,
+            state: 2
+          });
+          break;
         }
       }
+      this.startBreak();
+    },
+    startBreak() {
+      this.$refs.circle.style["stroke-dashoffset"] = this.perimeter;
+      this.$refs.circle.style.stroke = "#B5E254";
+      this.breakCountdown = 5;
+      this.timer = setInterval(() => {
+        this.breakCountdown--;
+        if (this.currentTask.countdown) return;
+        this.pause();
+        this.$refs.circle.style["stroke-dashoffset"] = 0;
+      }, 1000);
+    },
+    finishBreak() {
+      this.pause(true);
     }
   },
   watch: {
@@ -75,29 +95,17 @@ export default {
     },
     currentTask(val) {
       if (val && this.$refs.circle)
-        this.$refs.circle.style["stroke-dashoffset"] = 42.5 * 2 * 3.15;
+        this.$refs.circle.style["stroke-dashoffset"] = this.perimeter;
+    },
+    breakCountdown(val) {
+      this.$nextTick(() => this.setViewTime(val, this.breakTime));
+      if (val !== 0) return;
+      this.finishBreak();
     },
     "currentTask.countdown"(val) {
-      this.$nextTick(() => {
-        this.setViewTime(val);
-      });
-      if (val == 0) {
-        this.pause();
-        this.$store.dispatch("finishStep");
-        for (
-          let index = 0;
-          index < this.currentTask.estimated.length;
-          index++
-        ) {
-          if (this.currentTask.estimated[index] == 3) {
-            this.$store.dispatch("changeTaskEstimated", {
-              index,
-              state: 2
-            });
-            return;
-          }
-        }
-      }
+      this.$nextTick(() => this.setViewTime(val, this.totalTime));
+      if (val !== 0) return;
+      this.finishStep();
     }
   }
 };
@@ -114,6 +122,7 @@ export default {
   stroke-width: 15px;
   stroke-dasharray: calc(42.5 * 2 * 3.15);
   stroke-dashoffset: calc(42.5 * 2 * 3.15);
+  transition: stroke-dashoffset 0.6s linear;
 }
 $clock-size: 300px;
 $primary: #ea5548;

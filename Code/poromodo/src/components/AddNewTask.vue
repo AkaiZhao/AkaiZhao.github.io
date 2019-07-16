@@ -23,6 +23,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -36,12 +37,14 @@ export default {
         title: "",
         estimated: [],
         showDetails: false,
-        countdown: 5
+        countdown: 2
       }
     };
   },
+  computed: mapState(["taskCount"]),
   methods: {
     addTaskHandler() {
+      this.taskData = { ...this.taskData, id: this.taskCount };
       let res = this.taskControl(this.taskData, this.estimatedCount, 1);
       if (res) this.err = res;
     },

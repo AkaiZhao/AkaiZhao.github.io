@@ -81,6 +81,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -89,6 +90,7 @@ export default {
       estimated: []
     };
   },
+  computed: mapState(["tasks", "currentTask", "doneTasks"]),
   mounted() {
     this.taskDetailInfo();
   },
@@ -114,17 +116,6 @@ export default {
       res[index].showDetails = detailState ? false : true;
       this.changeTaskTitle(index);
       this.$store.dispatch("showDetail", res);
-    }
-  },
-  computed: {
-    tasks() {
-      return this.$store.state.tasks;
-    },
-    currentTask() {
-      return this.$store.state.currentTask;
-    },
-    doneTasks() {
-      return this.$store.state.doneTasks;
     }
   }
 };

@@ -1,11 +1,11 @@
 <template>
-  <div class="clock circle" :class="{'clock-abs':!currentTask}">
-    <h1 class="clock-static circle" v-if="!currentTask">PODOMORO</h1>
-    <svg class="clock-svg" v-if="currentTask" viewBox="0 0 100 100">
+  <div class="clock circle" :class="{'clock-abs':!task.current}">
+    <h1 class="clock-static circle" v-if="!task.current">PODOMORO</h1>
+    <svg class="clock-svg" v-if="task.current" viewBox="0 0 100 100">
       <circle class="outer" cx="50" cy="50" r="42.5" />
       <circle class="fill" ref="circle" cx="50" cy="50" r="42.5" />
     </svg>
-    <h1 class="clock-timer circle" v-if="currentTask">{{ min }}:{{ sec }}</h1>
+    <h1 class="clock-timer circle" v-if="task.current">{{ min }}:{{ sec }}</h1>
   </div>
 </template>
 <script>
@@ -23,12 +23,19 @@ export default {
       breakCountdown: 0
     };
   },
-  computed: mapState(["currentTask"]),
+  computed: {
+    ...mapState({
+      task: s => s.task,
+      break: s => s.break
+    })
+  },
   mounted() {
-    this.setViewTime(this.currentTask.countdown);
+    this.setViewTime(this.task.current.countdown, 1500);
   },
   methods: {
-    setViewTime(time, totalTime = 5) {
+    setViewTime(time, totalTime = 1500) {
+      console.log(time, totalTime);
+
       if (time == undefined) return;
       let m = Math.floor(time / 60).toString(),
         s = Math.floor(time % 60).toString();
@@ -40,22 +47,22 @@ export default {
     play() {
       this.startTask();
       this.timer = setInterval(() => {
-        this.$store.dispatch("countDown");
-        if (this.currentTask.countdown) return;
+        this.$store.dispatch("task/countdown");
+        if (this.task.current.countdown) return;
         this.pause();
         this.$refs.circle.style["stroke-dashoffset"] = 0;
       }, 1000);
     },
     pause(isBreak) {
-      if (!isBreak) this.$store.dispatch("changePlayState", "pause");
+      if (!isBreak) this.$store.dispatch("changePlayStatus", false);
       clearInterval(this.timer);
     },
     startTask() {
       this.$refs.circle.style.stroke = null;
-      for (let index = 0; index < this.currentTask.estimated.length; index++) {
-        if (this.currentTask.estimated[index] == 3) return; //if running return
-        if (this.currentTask.estimated[index] == 1)
-          return this.$store.dispatch("changeTaskEstimated", {
+      for (let index = 0; index < this.task.current.estimated.length; index++) {
+        if (this.task.current.estimated[index] == 3) return; //if running return
+        if (this.task.current.estimated[index] == 1)
+          return this.$store.dispatch("task/changeEstimated", {
             index,
             state: 3
           });
@@ -63,9 +70,9 @@ export default {
     },
     finishStep() {
       this.pause();
-      for (let index = 0; index < this.currentTask.estimated.length; index++) {
-        if (this.currentTask.estimated[index] == 3) {
-          this.$store.dispatch("changeTaskEstimated", {
+      for (let index = 0; index < this.task.current.estimated.length; index++) {
+        if (this.task.current.estimated[index] == 3) {
+          this.$store.dispatch("task/changeEstimated", {
             index,
             state: 2
           });
@@ -79,10 +86,10 @@ export default {
     startBreak() {
       this.$refs.circle.style["stroke-dashoffset"] = this.perimeter;
       this.$refs.circle.style.stroke = "#B5E254";
-      this.breakCountdown = this.breakTime;
+      this.$store.dispatch("break/setCountdown");
       this.timer = setInterval(() => {
         this.breakCountdown--;
-        this.$store.dispatch("countDown");
+        this.$store.dispatch("break/countdown");
         if (this.breakCountdown) return;
         this.pause();
         this.nextTask();
@@ -102,19 +109,21 @@ export default {
   },
   watch: {
     status(val) {
-      this[val]();
+      console.log(val);
+
+      val ? this.play() : this.pause();
     },
-    currentTask(val) {
+    "task.current"(val) {
       if (val && this.$refs.circle)
         this.$refs.circle.style["stroke-dashoffset"] = this.perimeter;
     },
-    breakCountdown(val) {
-      this.$nextTick(() => this.setViewTime(val, this.breakTime));
+    "break.countdown"(val) {
+      this.$nextTick(() => this.setViewTime(val, this.break.time));
       if (val !== 0) return;
       this.finishBreak();
     },
-    "currentTask.countdown"(val) {
-      this.$nextTick(() => this.setViewTime(val, this.totalTime));
+    "task.current.countdown"(val) {
+      this.$nextTick(() => this.setViewTime(val, 1500));
       if (val !== 0) return;
       this.finishStep();
     }

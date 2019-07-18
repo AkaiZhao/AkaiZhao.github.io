@@ -17,7 +17,7 @@ export default {
       }
       data.estimated = new Array(10);
       if (count) for (let i = 0; i < count; i++) data.estimated[i] = 1;
-      if (action == 1) this.$store.dispatch("addNewTask", { ...data });
+      if (action == 1) this.$store.dispatch("task/add", { ...data });
       else if (action == 2) this.$store.dispatch("modifyTask", { ...data });
     },
     calcEstimatedArray(index) {

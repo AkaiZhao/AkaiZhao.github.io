@@ -1,38 +1,33 @@
 <template>
   <div id="app">
     <div class="left">
-      <h1 class="left-title" v-if="currentTask">{{currentTask.title}}</h1>
-      <div class="list-info-estimated left-estimated" v-if="currentTask">
+      <h1 class="left-title" v-if="task.current">{{task.current.title}}</h1>
+      <div class="list-info-estimated left-estimated" v-if="task.current">
         <div
           class="list-info-estimated-icon"
-          v-for="(e,i) in currentTask.estimated"
+          v-for="(e,i) in task.current.estimated"
           :key="i"
           v-show="e"
           :class="{ unstarted: e == 1, done: e == 2, undone: e == 3 }"
         ></div>
       </div>
-      <clock-cmp :status="playStatus"></clock-cmp>
-      <div class="action" v-if="currentTask">
+      <clock-cmp :status="isPlaying"></clock-cmp>
+      <div class="action" v-if="task.current">
         <a
           href="#"
           class="action-botton action-botton-play"
-          @click.prevent="changeStatus('play')"
-          :class="{ active: playStatus == 'play' }"
+          @click.prevent="changeStatus(true)"
+          :class="{ active: isPlaying }"
         ></a>
         <a
           href="#"
           class="action-botton action-botton-pause"
-          @click.prevent="changeStatus('pause')"
-          :class="{ active: playStatus == 'pause' }"
+          @click.prevent="changeStatus(false)"
+          :class="{ active: !isPlaying }"
         ></a>
-        <a
-          href="#"
-          class="action-botton action-botton-reset"
-          @click.prevent="changeStatus('reset')"
-          :class="{ active: playStatus == 'reset' }"
-        ></a>
+        <a href="#" class="action-botton action-botton-reset"></a>
       </div>
-      <p class="task task-complete" v-if="!currentTask">
+      <p class="task task-complete" v-if="!task.current">
         You don’t have any task now,
         <br />please add task first!
       </p>
@@ -40,14 +35,14 @@
         <p>PODOMORO</p>
       </footer>
     </div>
-    <div class="right" :class="{'right-abs':currentActive >= 0}">
+    <div class="right" :class="{'right-abs':page >= 0}">
       <tool-bar></tool-bar>
       <transition name="slide">
-        <div class="settings" v-show="currentActive >= 0">
+        <div class="settings" v-show="page >= 0">
           <keep-alive>
-            <add-new-task v-if="currentActive === 0"></add-new-task>
-            <task-list v-if="currentActive === 1"></task-list>
-            <anyalytics-report v-if="currentActive === 2"></anyalytics-report>
+            <add-new-task v-if="page === 0"></add-new-task>
+            <task-list v-if="page === 1"></task-list>
+            <anyalytics-report v-if="page === 2"></anyalytics-report>
           </keep-alive>
         </div>
       </transition>
@@ -70,12 +65,19 @@ export default {
     TaskList,
     AnyalyticsReport
   },
-  computed: mapState(["currentActive", "tasks", "currentTask", "playStatus"]),
+  // computed: mapState(["currentActive", "tasks", "task.current", "playStatus"]),
+  computed: {
+    ...mapState({
+      task: s => s.task,
+      page: s => s.page,
+      isPlaying: s => s.isPlaying
+    })
+  },
   created() {
     this.checkVersion();
   },
   mounted() {
-    if (this.tasks.length && !this.currentTask) this.setCurrentTask();
+    if (this.task.list.length && !this.task.current) this.settask.current();
   },
   methods: {
     checkVersion() {
@@ -84,17 +86,17 @@ export default {
       localStorage.setItem("version", "1.1");
     },
     changeStatus(status) {
-      if (this.currentTask.countdown <= 0) return;
-      this.$store.dispatch("changePlayState", status);
+      if (this.task.current.countdown <= 0) return;
+      this.$store.dispatch("changePlayStatus", status);
     },
-    setCurrentTask() {
-      this.$store.dispatch("setCurrentTask", this.tasks[0]);
+    setTask() {
+      this.$store.dispatch("task/setTask", this.tasks[0]);
     }
   },
   watch: {
-    currentTask(val) {
+    "task.current"(val) {
       if (val) return;
-      this.setCurrentTask();
+      this.settask();
       this.changeStatus("pause");
     }
   }

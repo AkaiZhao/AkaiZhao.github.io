@@ -15,11 +15,11 @@
           class="list"
           :class="{ 'list-show': t.showDetails }"
           v-show="currentTag==0"
-          v-for="(t, ti) in tasks"
-          :key="ti*Math.random()"
+          v-for="(t, ti) in task.list"
+          :key="t.id"
         >
           <div class="list-top">
-            <div class="list-mark" :class="{ 'list-done': t == currentTask }"></div>
+            <div class="list-mark" :class="{ 'list-done': t == task.current }"></div>
             <div class="list-info">
               <h5 class="list-info-title">{{ t.title }}</h5>
               <div class="list-info-estimated">
@@ -36,7 +36,7 @@
               <div class="list-active-dot"></div>
             </a>
           </div>
-          <div class="list-detail" v-if="t.showDetails">
+          <div class="list-detail">
             <h4 class="list-detail-title">TASK TITLE</h4>
             <input class="list-detail-input" type="text" v-model="title" />
             <h4 class="list-detail-title">ESTIMATED TOMOTO</h4>
@@ -58,11 +58,11 @@
           class="list"
           :class="{ 'list-show': t.showDetails }"
           v-show="currentTag==1"
-          v-for="(t, ti) in doneTasks"
+          v-for="(t, ti) in task.done"
           :key="ti*Math.random()"
         >
           <div class="list-top">
-            <div class="list-mark" :class="{ 'list-done': t == currentTask }"></div>
+            <div class="list-mark" :class="{ 'list-done': t == task.current }"></div>
             <div class="list-info">
               <h5 class="list-info-title">{{ t.title }}</h5>
               <div class="list-info-estimated">
@@ -82,6 +82,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { log } from "util";
 export default {
   data() {
     return {
@@ -90,32 +91,29 @@ export default {
       estimated: []
     };
   },
-  computed: mapState(["tasks", "currentTask", "doneTasks"]),
+  computed: {
+    ...mapState({
+      task: s => s.task
+    })
+  },
   mounted() {
     this.taskDetailInfo();
   },
   methods: {
     taskDetailInfo() {
-      for (let i = 0; i < this.tasks.length; i++) {
-        if (this.tasks[i].showDetails) {
-          this.title = this.tasks[i].title;
-          this.estimated = this.tasks[i].estimated;
+      for (let i = 0; i < this.task.list.length; i++) {
+        console.log(this.task);
+
+        if (this.task.list[i].showDetails) {
+          this.title = this.task.list[i].title;
+          this.estimated = this.task.list[i].estimated;
           return;
         }
       }
     },
-    changeTaskTitle(index) {
-      this.title = this.tasks[index].title;
-    },
     showDetail(index) {
-      let res = this.tasks;
-      let detailState = res[index].showDetails;
-      for (let j = 0; j < res.length; j++) {
-        res[j].showDetails = false;
-      }
-      res[index].showDetails = detailState ? false : true;
-      this.changeTaskTitle(index);
-      this.$store.dispatch("showDetail", res);
+      this.$store.dispatch("task/showDetail", index);
+      this.taskDetailInfo();
     }
   }
 };

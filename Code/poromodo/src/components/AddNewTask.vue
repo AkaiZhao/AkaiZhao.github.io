@@ -37,14 +37,18 @@ export default {
         title: "",
         estimated: [],
         showDetails: false,
-        countdown:2
+        countdown: 1500
       }
     };
   },
-  computed: mapState(["taskCount"]),
+  computed: {
+    ...mapState({
+      task: s => s.task
+    })
+  },
   methods: {
     addTaskHandler() {
-      this.taskData = { ...this.taskData, id: this.taskCount };
+      this.taskData = { ...this.taskData, id: this.task.id };
       let res = this.taskControl(this.taskData, this.estimatedCount, 1);
       if (res) this.err = res;
     },

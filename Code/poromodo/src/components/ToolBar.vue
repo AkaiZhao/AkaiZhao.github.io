@@ -8,10 +8,10 @@
         v-for="(i, index) in icons"
         :title="i.name"
         :key="i.name"
-        @click="changeActive(index)"
+        @click="changePage(index)"
       ></a>
     </div>
-    <a href="#" @click.prevent="changeActive(-1)" class="close"></a>
+    <a href="#" @click.prevent="changePage(-1)" class="close"></a>
   </div>
 </template>
 <script>
@@ -30,17 +30,17 @@ export default {
       ]
     };
   },
-  computed: mapState(["currentActive"]),
+  computed: mapState(["page"]),
   mounted() {
-    this.icons[this.currentActive].class.active = true;
+    this.icons[this.page].class.active = true;
   },
   methods: {
-    changeActive(act) {
-      this.$store.commit("CHANGEACTIVE", act);
+    changePage(act) {
+      this.$store.dispatch("changePage", act);
     }
   },
   watch: {
-    currentActive(val, oval) {
+    page(val, oval) {
       if (oval >= 0) this.icons[oval].class.active = false;
       if (val >= 0) this.icons[val].class.active = true;
     }

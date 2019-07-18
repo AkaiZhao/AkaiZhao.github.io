@@ -57,13 +57,18 @@
 
 <script>
 import { mapState } from "vuex";
+import ClockCmp from "./components/Clock.vue";
+import ToolBar from "./components/ToolBar.vue";
+import AddNewTask from "./components/AddNewTask.vue";
+import TaskList from "./components/TaskList.vue";
+import AnyalyticsReport from "./components/AnyalyticsReport.vue";
 export default {
   components: {
-    ClockCmp: () => import("./components/Clock.vue"),
-    ToolBar: () => import("./components/ToolBar.vue"),
-    AddNewTask: () => import("./components/AddNewTask.vue"),
-    TaskList: () => import("./components/TaskList.vue"),
-    AnyalyticsReport: () => import("./components/AnyalyticsReport.vue")
+    ClockCmp,
+    ToolBar,
+    AddNewTask,
+    TaskList,
+    AnyalyticsReport
   },
   computed: mapState(["currentActive", "tasks", "currentTask", "playStatus"]),
   created() {

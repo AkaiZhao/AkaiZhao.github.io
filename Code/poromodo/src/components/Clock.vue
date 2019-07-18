@@ -20,7 +20,7 @@ export default {
       perimeter: 42.5 * 6.3,
       totalTime: 2,
       breakTime: 2,
-      breakCountdown: 2
+      breakCountdown: 0
     };
   },
   computed: mapState(["currentTask"]),
@@ -72,18 +72,29 @@ export default {
           break;
         }
       }
-      this.startBreak();
+      setTimeout(() => {
+        this.startBreak();
+      }, 1000);
     },
     startBreak() {
       this.$refs.circle.style["stroke-dashoffset"] = this.perimeter;
       this.$refs.circle.style.stroke = "#B5E254";
-      this.breakCountdown = 5;
+      this.breakCountdown = this.breakTime;
       this.timer = setInterval(() => {
         this.breakCountdown--;
-        if (this.currentTask.countdown) return;
+        this.$store.dispatch("countDown");
+        if (this.breakCountdown) return;
         this.pause();
+        this.nextTask();
         this.$refs.circle.style["stroke-dashoffset"] = 0;
       }, 1000);
+      console.log(this.currentTask);
+    },
+    nextTask() {
+      for (let i = 0; i < this.currentTask.length; i++) {
+        if (this.currentTask[i] == 1 || this.currentTask[i] == 3) {
+        }
+      }
     },
     finishBreak() {
       this.pause(true);

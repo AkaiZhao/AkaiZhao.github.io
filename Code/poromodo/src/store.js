@@ -12,6 +12,8 @@ export default new Vuex.Store({
     doneTasks: [],
     currentActive: 0,
     currentState: "",
+    breakTime: 5,
+    breakcountdown: 0,
     taskCount: 1,
     playStatus: "pause"
   },
@@ -38,7 +40,11 @@ export default new Vuex.Store({
       commit("SELECTTASK", state);
     },
     countDown({ commit }) {
-      commit("COUNTDOWN");
+      commit("BREAKCOUNTDOWN");
+      commit("TASKCOUNTDOWN");
+    },
+    setBreak({ commit }) {
+      commit("SETBREAK");
     },
     changePlayState({ commit }, state) {
       commit("CHANGEPLAYSTATE", state);
@@ -75,8 +81,14 @@ export default new Vuex.Store({
     SHOWDETAIL(state, isShow) {
       state.tasks = isShow;
     },
-    COUNTDOWN(state) {
+    TASKCOUNTDOWN(state) {
       state.currentTask.countdown--;
+    },
+    BREAKCOUNTDOWN(state) {
+      state.breakcountdown--;
+    },
+    SETBREAK(state) {
+      state.breakcountdown = state.breakTime;
     },
     CHANGEPLAYSTATE(state, status) {
       state.playStatus = status;

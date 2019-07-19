@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    time: 300,
+    time: 5,
     countdown: 0
   },
   actions: {
@@ -17,7 +17,7 @@ export default {
       state.countdown = state.time;
     },
     countdown(state) {
-      state.countdown--;
+      state.countdown -= 1;
     }
   }
 };

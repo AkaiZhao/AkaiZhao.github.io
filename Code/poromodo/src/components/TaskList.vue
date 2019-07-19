@@ -19,13 +19,13 @@
           :key="t.id"
         >
           <div class="list-top">
-            <div class="list-mark" :class="{ 'list-done': t == task.current }"></div>
+            <div class="list-mark" :class="{ 'list-done': t.id == task.current.id }"></div>
             <div class="list-info">
               <h5 class="list-info-title">{{ t.title }}</h5>
               <div class="list-info-estimated">
                 <div
                   class="list-info-estimated-icon"
-                  v-for="(e, ei) in t.estimated"
+                  v-for="(e,ei) in t.estimated"
                   v-show="e"
                   :key="ei*Math.random()"
                   :class="{ unstarted: e == 1, done: e == 2, undone: e == 3 }"
@@ -58,8 +58,8 @@
           class="list"
           :class="{ 'list-show': t.showDetails }"
           v-show="currentTag==1"
-          v-for="(t, ti) in task.done"
-          :key="ti*Math.random()"
+          v-for="(t) in task.done"
+          :key="t.id"
         >
           <div class="list-top">
             <div class="list-mark" :class="{ 'list-done': t == task.current }"></div>
@@ -68,7 +68,7 @@
               <div class="list-info-estimated">
                 <div
                   class="list-info-estimated-icon done"
-                  v-for="(e, ei) in t.estimated"
+                  v-for="(e,ei) in t.estimated"
                   v-show="e"
                   :key="ei*Math.random()"
                 ></div>
@@ -102,8 +102,6 @@ export default {
   methods: {
     taskDetailInfo() {
       for (let i = 0; i < this.task.list.length; i++) {
-        console.log(this.task);
-
         if (this.task.list[i].showDetails) {
           this.title = this.task.list[i].title;
           this.estimated = this.task.list[i].estimated;

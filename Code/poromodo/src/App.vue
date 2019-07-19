@@ -25,7 +25,7 @@
           @click.prevent="changeStatus(false)"
           :class="{ active: !isPlaying }"
         ></a>
-        <a href="#" class="action-botton action-botton-reset"></a>
+        <a href="#" class="action-botton action-botton-reset" @click.prevent="reset"></a>
       </div>
       <p class="task task-complete" v-if="!task.current">
         You don’t have any task now,
@@ -81,9 +81,9 @@ export default {
   },
   methods: {
     checkVersion() {
-      if (localStorage.getItem("version") === "1.1") return;
+      if (localStorage.getItem("version") === "1.2") return;
       localStorage.clear();
-      localStorage.setItem("version", "1.1");
+      localStorage.setItem("version", "1.2");
     },
     changeStatus(status) {
       if (this.task.current.countdown <= 0) return;
@@ -91,6 +91,10 @@ export default {
     },
     setTask() {
       this.$store.dispatch("task/setTask", this.tasks[0]);
+    },
+    reset() {
+      this.$store.dispatch("task/reset");
+      this.changeStatus(false);
     }
   },
   watch: {
@@ -192,19 +196,21 @@ p {
     }
     &-play {
       background-image: url("~@/assets/icons/start_gray.svg");
-      &.active {
+      &.active,
+      &:active {
         background-image: url("~@/assets/icons/start_red.svg");
       }
     }
     &-pause {
       background-image: url("~@/assets/icons/pause_gray.svg");
-      &.active {
+      &.active,
+      &:active {
         background-image: url("~@/assets/icons/pause_red.svg");
       }
     }
     &-reset {
       background-image: url("~@/assets/icons/reset_gray.svg");
-      &.active {
+      &:active {
         background-image: url("~@/assets/icons/reset_red.svg");
       }
     }

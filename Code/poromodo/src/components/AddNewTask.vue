@@ -36,8 +36,7 @@ export default {
       taskData: {
         title: "",
         estimated: [],
-        showDetails: false,
-        countdown: 1500
+        showDetails: false
       }
     };
   },

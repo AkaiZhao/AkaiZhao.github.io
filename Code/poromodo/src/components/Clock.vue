@@ -14,13 +14,9 @@ export default {
   props: ["status"],
   data() {
     return {
-      isTimer: true,
       min: "25",
       sec: "00",
-      perimeter: 42.5 * 6.3,
-      totalTime: 2,
-      breakTime: 2,
-      breakCountdown: 0
+      perimeter: 42.5 * 6.3
     };
   },
   computed: {
@@ -30,12 +26,10 @@ export default {
     })
   },
   mounted() {
-    this.setViewTime(this.task.current.countdown, 1500);
+    this.setViewTime(this.task.current.countdown, this.task.countdownBase);
   },
   methods: {
-    setViewTime(time, totalTime = 1500) {
-      console.log(time, totalTime);
-
+    setViewTime(time, totalTime) {
       if (time == undefined) return;
       let m = Math.floor(time / 60).toString(),
         s = Math.floor(time % 60).toString();
@@ -54,7 +48,7 @@ export default {
       }, 1000);
     },
     pause(isBreak) {
-      if (!isBreak) this.$store.dispatch("changePlayStatus", false);
+      this.$store.dispatch("changePlayStatus", false);
       clearInterval(this.timer);
     },
     startTask() {
@@ -88,14 +82,12 @@ export default {
       this.$refs.circle.style.stroke = "#B5E254";
       this.$store.dispatch("break/setCountdown");
       this.timer = setInterval(() => {
-        this.breakCountdown--;
         this.$store.dispatch("break/countdown");
-        if (this.breakCountdown) return;
+        if (this.break.countdown) return;
         this.pause();
         this.nextTask();
         this.$refs.circle.style["stroke-dashoffset"] = 0;
       }, 1000);
-      console.log(this.currentTask);
     },
     nextTask() {
       for (let i = 0; i < this.currentTask.length; i++) {
@@ -109,8 +101,6 @@ export default {
   },
   watch: {
     status(val) {
-      console.log(val);
-
       val ? this.play() : this.pause();
     },
     "task.current"(val) {
@@ -123,7 +113,7 @@ export default {
       this.finishBreak();
     },
     "task.current.countdown"(val) {
-      this.$nextTick(() => this.setViewTime(val, 1500));
+      this.$nextTick(() => this.setViewTime(val, this.task.countdownBase));
       if (val !== 0) return;
       this.finishStep();
     }

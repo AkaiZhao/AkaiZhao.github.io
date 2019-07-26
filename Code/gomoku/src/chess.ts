@@ -1,14 +1,14 @@
 import { WindowData, ChessData, Counter } from './interfaces';
 
 export default class {
-  data: number[][] = [];
-  isWhite: boolean = false;
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-  win: boolean = false;
-  lastChess: { x: number; y: number; px: number; py: number };
-  constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
-    this.canvas = canvas;
+  private data: number[][] = [];
+  private isWhite: boolean = false;
+  private context: CanvasRenderingContext2D;
+  public winner: number = 0;
+  private lastChess: { x: number; y: number; px: number; py: number };
+  private lastTwoChess: { x: number; y: number; px: number; py: number };
+  private undoCount: number = 0;
+  constructor(context: CanvasRenderingContext2D) {
     this.context = context;
     this.createNewGame();
   }
@@ -24,15 +24,29 @@ export default class {
       }
     }
     this.isWhite = false;
-    this.win = false;
+    this.winner = 0;
     this.lastChess = null;
+  }
+  /**
+   * 悔棋
+   */
+  public undo() {
+    if (!this.lastChess || this.undoCount == 1) return;
+    this.undoCount++;
+    let { x, y } = this.lastChess;
+    this.isWhite = !this.isWhite;
+    this.data[x][y] = 0;
+    this.lastChess = this.lastTwoChess;
+    this.lastTwoChess = null;
   }
   /**
    * 下棋
    */
   public play({ e, offset }: WindowData) {
+    if (this.winner) return;
     let { x, y, px, py } = this.calcPosition({ e, offset });
     if (x >= 15 || x < 0 || y >= 15 || y < 0 || this.data[x][y] != 0) return;
+    if (this.lastChess) this.lastTwoChess = this.lastChess;
     this.lastChess = { x, y, px, py };
     if (this.isWhite) {
       this.data[x][y] = -1;
@@ -43,6 +57,7 @@ export default class {
       this.drawChess({ x, y, c: this.data[x][y] });
       this.isWhite = true;
     }
+    this.undoCount = 0;
     this.judgement({ x, y, c: this.data[x][y] });
     this.refresh();
   }
@@ -61,6 +76,7 @@ export default class {
    * 滑鼠特效
    */
   public hover({ e, offset }: WindowData) {
+    if (this.winner) return;
     let { px, py } = this.calcPosition({ e, offset });
     this.drawBlock(px, py);
   }
@@ -160,10 +176,14 @@ export default class {
         else rtlb.bleft = true;
       }
     }
-    console.log(rtlb.count);
-
-    if (row.count >= 5 || col.count >= 5 || ltrb.count >= 5 || rtlb.count >= 5)
-      console.log('win');
+    if (
+      row.count >= 5 ||
+      col.count >= 5 ||
+      ltrb.count >= 5 ||
+      rtlb.count >= 5
+    ) {
+      this.winner = c;
+    }
   }
   /**
    * 在棋子上標記紅點

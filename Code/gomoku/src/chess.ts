@@ -1,4 +1,4 @@
-import { WindowData, ChessData } from './interfaces';
+import { WindowData, ChessData, Counter } from './interfaces';
 
 export default class {
   data: number[][] = [];
@@ -41,7 +41,6 @@ export default class {
     } else {
       this.data[x][y] = 1;
       this.drawChess({ x, y, c: this.data[x][y] });
-
       this.isWhite = true;
     }
     this.judgement({ x, y, c: this.data[x][y] });
@@ -119,50 +118,51 @@ export default class {
    * @param {number} c 棋子顏色(1or-1)
    */
   private judgement({ x, y, c }: ChessData): void {
-    let count1: number = 0,
-      count2: number = 0,
-      count3: number = 0,
-      count4: number = 0;
-    // 水平
-    for (let i = x; i < 15; i++) {
-      if (this.data[i][y] !== c) break;
-      count1++;
+    let row: Counter = { count: -1, bright: false, bleft: false };
+    let col: Counter = { count: -1, bright: false, bleft: false };
+    let ltrb: Counter = { count: -1, bright: false, bleft: false };
+    let rtlb: Counter = { count: -1, bright: false, bleft: false };
+    for (let i = 0; i < 5; i++) {
+      // 水平
+      if (this.data[x + i] && !row.bright) {
+        if (this.data[x + i][y] == c) row.count++;
+        else row.bright = true;
+      }
+      if (this.data[x - i] && !row.bleft) {
+        if (this.data[x - i][y] === c) row.count++;
+        else row.bleft = true;
+      }
+      // 垂直
+      if (this.data[y + i] && !col.bright) {
+        if (this.data[x][y + i] == c) col.count++;
+        else col.bright = true;
+      }
+      if (this.data[y - i] && !col.bleft) {
+        if (this.data[x][y - i] === c) col.count++;
+        else col.bleft = true;
+      }
+      // 左上右下
+      if (this.data[x + i] && this.data[y + i] && !ltrb.bright) {
+        if (this.data[x + i][y + i] == c) ltrb.count++;
+        else ltrb.bright = true;
+      }
+      if (this.data[x - i] && this.data[y - i] && !ltrb.bleft) {
+        if (this.data[x - i][y - i] === c) ltrb.count++;
+        else ltrb.bleft = true;
+      }
+      // 右上左下
+      if (this.data[x + i] && this.data[y - i] && !rtlb.bright) {
+        if (this.data[x + i][y - i] == c) rtlb.count++;
+        else rtlb.bright = true;
+      }
+      if (this.data[x - i] && this.data[y + i] && !rtlb.bleft) {
+        if (this.data[x - i][y + i] === c) rtlb.count++;
+        else rtlb.bleft = true;
+      }
     }
-    for (let i = x - 1; i > 0; i--) {
-      if (this.data[i][y] !== c) break;
-      count1++;
-    }
+    console.log(rtlb.count);
 
-    // 垂直
-    for (let i = y; i < 15; i++) {
-      if (this.data[x][i] !== c) break;
-      count2++;
-    }
-    for (let i = y - 1; i > 0; i--) {
-      if (this.data[x][i] !== c) break;
-      count2++;
-    }
-
-    // 左上右
-    for (let i = x + 1, j = y + 1; i < 15 && j < 15; i++, j++) {
-      if (this.data[i][j] !== c) break;
-      count3++;
-    }
-    for (let i = x, j = y; i >= 0 && j >= 0; i--, j--) {
-      if (this.data[i][j] !== c) break;
-      count3++;
-    }
-
-    // 右上左
-    for (let i = x + 1, j = y - 1; i < 15 && j >= 0; i++, j--) {
-      if (this.data[i][j] !== c) break;
-      count4++;
-    }
-    for (let i = x, j = y; i >= 0 && j < 15; i--, j++) {
-      if (this.data[i][j] !== c) break;
-      count4++;
-    }
-    if (count1 >= 5 || count2 >= 5 || count3 >= 5 || count4 >= 5)
+    if (row.count >= 5 || col.count >= 5 || ltrb.count >= 5 || rtlb.count >= 5)
       console.log('win');
   }
   /**

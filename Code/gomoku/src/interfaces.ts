@@ -7,3 +7,8 @@ export interface ChessData {
   y: number;
   c: number;
 }
+export interface Counter {
+  count: number;
+  bright: boolean;
+  bleft: boolean;
+}

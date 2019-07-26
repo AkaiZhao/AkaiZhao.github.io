@@ -119,25 +119,51 @@ export default class {
    * @param {number} c 棋子顏色(1or-1)
    */
   private judgement({ x, y, c }: ChessData): void {
-    let countH: number = 0,
-      countV: number = 0;
+    let count1: number = 0,
+      count2: number = 0,
+      count3: number = 0,
+      count4: number = 0;
+    // 水平
+    for (let i = x; i < 15; i++) {
+      if (this.data[i][y] !== c) break;
+      count1++;
+    }
+    for (let i = x - 1; i > 0; i--) {
+      if (this.data[i][y] !== c) break;
+      count1++;
+    }
 
-    for (let i = x; i > 0; i--) {
-      if (this.data[i][y] !== c) break;
-      countH += 1;
-    }
-    for (let i = 0; i < x; i++) {
-      if (this.data[i][y] !== c) break;
-      countH += 1;
-    }
-    for (let i = y; i > 0; i--) {
+    // 垂直
+    for (let i = y; i < 15; i++) {
       if (this.data[x][i] !== c) break;
-      countV += 1;
+      count2++;
     }
-    for (let i = 0; i < y; i++) {
+    for (let i = y - 1; i > 0; i--) {
       if (this.data[x][i] !== c) break;
-      countV += 1;
+      count2++;
     }
+
+    // 左上右
+    for (let i = x + 1, j = y + 1; i < 15 && j < 15; i++, j++) {
+      if (this.data[i][j] !== c) break;
+      count3++;
+    }
+    for (let i = x, j = y; i >= 0 && j >= 0; i--, j--) {
+      if (this.data[i][j] !== c) break;
+      count3++;
+    }
+
+    // 右上左
+    for (let i = x + 1, j = y - 1; i < 15 && j >= 0; i++, j--) {
+      if (this.data[i][j] !== c) break;
+      count4++;
+    }
+    for (let i = x, j = y; i >= 0 && j < 15; i--, j++) {
+      if (this.data[i][j] !== c) break;
+      count4++;
+    }
+    if (count1 >= 5 || count2 >= 5 || count3 >= 5 || count4 >= 5)
+      console.log('win');
   }
   /**
    * 在棋子上標記紅點

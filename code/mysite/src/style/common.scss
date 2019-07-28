@@ -1,0 +1,50 @@
+body {
+  background-color: rgb(34, 34, 34);
+  color: #fff;
+}
+a {
+  text-decoration: none;
+  display: block;
+}
+.container {
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+.flex {
+  display: flex;
+  &-aic {
+    align-items: center;
+  }
+  &-jcc {
+    justify-content: center;
+  }
+  &-jcsb {
+    justify-content: space-between;
+  }
+  &-fe {
+    justify-content: flex-end;
+  }
+  &-warp {
+    flex-wrap: wrap;
+  }
+}
+.page {
+  padding-top: 100px;
+  &-home {
+    background-size: cover;
+    background-image: url('~@/assets/background/home.jpg');
+    background-repeat: no-repeat;
+  }
+}
+
+.card{
+  width:calc(100%/3);
+  &-group{
+
+  }
+  &-img{
+    display:block;
+    height:300px;
+  }
+}

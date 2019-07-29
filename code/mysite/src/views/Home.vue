@@ -4,12 +4,12 @@
 
     <main class="main page-shadow page page-home">
       <section class="container section section-home flex flex-aic flex-jcc">
-        <!-- <div class="section-helf">
+        <div class="section-helf">
           <h1>
             你好，
             <br />歡迎光臨我的作品網站
           </h1>
-        </div>-->
+        </div>
         <icon-frontend />
         <!-- <scrollDownIcon class="scorll_down" /> -->
       </section>

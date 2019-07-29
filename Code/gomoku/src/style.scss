@@ -3,13 +3,16 @@ body {
   background-color: #222;
   -moz-user-select: none;
   -webkit-user-select: none;
+  background-image: url('./background.jpg');
+  background-size: 100% 100vh;
+  background-repeat: no-repeat;
 }
 h1 {
   text-align: center;
   color: #eee;
 }
 #canvas {
-  border: 1px solid #111;
+  border: 1px solid rgb(255, 255, 255);
   margin: 0 auto;
   display: block;
 }

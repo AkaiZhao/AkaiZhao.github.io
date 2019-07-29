@@ -36,15 +36,23 @@ a {
     background-image: url('~@/assets/background/home.jpg');
     background-repeat: no-repeat;
   }
+  &-shadow {
+    box-shadow: 0 5px 10px #222;
+  }
 }
 
-.card{
-  width:calc(100%/3);
-  &-group{
-
+.card {
+  box-sizing: border-box;
+  padding: 0 10px;
+  width: 30%;
+  margin: 10px calc(10% / 6);
+  &-img {
+    display: block;
+    height: 300px;
   }
-  &-img{
-    display:block;
-    height:300px;
+  &-title {
+    color: #eee;
+    font-weight: bold;
+    padding-bottom: 10px;
   }
 }

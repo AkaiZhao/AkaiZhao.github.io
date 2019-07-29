@@ -1,5 +1,5 @@
 <template>
-  <div class="menu" :class="{ 'menu-show': isMenuOpen}">
+  <div class="menu" :class="{ 'menu-show': isMenuOpen }">
     <ul class="menu-list">
       <li class="menu-list-tag">
         <router-link to="/">首頁</router-link>
@@ -163,8 +163,8 @@ export default Vue.extend({
   }
   &-info {
     position: fixed;
-    bottom: 10px;
-    right: 10px;
+    bottom: 20px;
+    right: 30px;
     text-align: right;
     font-size: 24px;
     color: #fff;

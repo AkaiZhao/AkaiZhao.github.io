@@ -30,7 +30,7 @@ export default Vue.extend({
   animation: hide-deco 1s linear 3s backwards;
   animation: show-deco 0.8s both;
   &-text {
-    font-weight: bold;
+    // font-weight: bold;
     user-select: none;
   }
   &:hover {

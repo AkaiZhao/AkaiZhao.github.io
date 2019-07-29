@@ -27,7 +27,7 @@ export default class {
    */
   private drawBoard(): void {
     for (let i = 20; i < this.canvas.height; i += 40) {
-      this.context.strokeStyle = '#000';
+      this.context.strokeStyle = '#fff';
       this.context.beginPath();
       this.context.moveTo(20, i);
       this.context.lineTo(this.canvas.height - 20, i);

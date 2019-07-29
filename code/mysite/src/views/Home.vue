@@ -11,7 +11,6 @@
           </h1>
         </div>
         <icon-frontend />
-        <!-- <scrollDownIcon class="scorll_down" /> -->
       </section>
     </main>
     <section class="section section-blue">
@@ -31,7 +30,7 @@
           <li class="card">
             <img class="card-img" src />
             <h4 class="card-title">JS Frameworks</h4>
-            <p class="card-text">較為熟練Vue.js社群，react及angular較少接觸，目前經手的專案都已vue.js為主。</p>
+            <p class="card-text">較為熟練Vue，React及Angular較少接觸，目前經手的專案都已Vue為主。</p>
           </li>
           <li class="card">
             <img class="card-img" src />

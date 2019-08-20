@@ -63,7 +63,9 @@ export default class Home extends Vue {
     { title: 'PS / AI / XD', text: '會使用設計軟體，有網站版面及流程規劃經驗。' },
   ];
   private workArr: Array<{ title: string, text: string, url?: string, img: string }> = [
-    { title: 'TIC-TAC-TOE', text: '練習時，製作的井字遊戲。', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' }
+    { title: 'TIC-TAC-TOE', text: '練習時，製作的井字遊戲。', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' },
+    { title: 'GOMOKU', text: '研究CANVAS時製作的五子棋遊戲。', url: 'https://akaizhao.github.io/work/gomoku/', img: 'tic-tac-toe' },
+    { title: 'YOLOMOMENT', text: '職訓時與組員共同設計的餐廳網站。', url: 'https://akaizhao.github.io/work/yolomoment/', img: 'tic-tac-toe' },
   ];
   private linkTo(url: string) {
     window.location.href = url;
@@ -123,9 +125,9 @@ export default class Home extends Vue {
   }
 }
 .work {
-  width: 25%;
+  width: calc(25% - 20px);
   box-sizing: border-box;
-  margin: 0 20px;
+  margin: 0 10px;
   position: relative;
   overflow: hidden;
   &-group {
@@ -196,10 +198,10 @@ export default class Home extends Vue {
         background-color: rgba(#000, 0.9);
       }
       &-title {
-        bottom: 150px;
+        bottom: 140px;
       }
       &-text {
-        bottom: 130px;
+        bottom: 120px;
       }
     }
   }

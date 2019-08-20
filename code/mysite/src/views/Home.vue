@@ -7,7 +7,7 @@
         <div class="section-helf">
           <h1>
             你好，
-            <br />歡迎光臨我的作品網站
+            <br />我是 AKAI 。
           </h1>
         </div>
         <icon-frontend />
@@ -17,36 +17,30 @@
       <h1 class="section-title">MY SKILLS</h1>
       <div class="container">
         <ul class="card-group flex flex-warp">
-          <li class="card">
-            <img class="card-img" src />
-            <h4 class="card-title">Javascript/Typescript</h4>
-            <p class="card-text">熟悉ES6語法設計，目前專案主要基於vue.js開發，能獨立開發遊戲平台。</p>
-          </li>
-          <li class="card">
-            <img class="card-img" src />
-            <h4 class="card-title">SASS/SCSS</h4>
-            <p class="card-text">目前所有專案皆使用SCSS開發，在樣式設計上主要以功能作為區分的模組化設計。</p>
-          </li>
-          <li class="card">
-            <img class="card-img" src />
-            <h4 class="card-title">JS Frameworks</h4>
-            <p class="card-text">較為熟練Vue，React及Angular較少接觸，目前經手的專案都已Vue為主。</p>
-          </li>
-          <li class="card">
-            <img class="card-img" src />
-            <h4 class="card-title">UI/UX</h4>
-            <p class="card-text">過去曾設計公司的後台介面，主要偏向扁平化設計，在前端開發時會注意UX部分，希望能讓自己開發的產品有優良的使用體驗。</p>
-          </li>
-          <li class="card">
-            <img class="card-img" src />
-            <h4 class="card-title">PS/AI/XD</h4>
-            <p class="card-text">會使用這些軟體，有網站版面及流程規劃經驗。</p>
+          <li class="card" v-for="skill in skillArr" :key="skill.title">
+            <h4 class="card-title">{{skill.title}}</h4>
+            <p class="card-text">{{skill.text}}</p>
           </li>
         </ul>
       </div>
     </section>
-    <section class="section section-home flex flex-aic flex-jcc">
-      <h1 class="section-title">MY WORKS</h1>
+    <section class="section">
+      <div class="container">
+        <ul class="work-group">
+          <li class="work work-head">
+            My
+            <br />woRKs
+          </li>
+          <li class="work" v-for="work in workArr" :key="work.title">
+            <a :href="work.url" target="_blank">
+              <img class="work-image" :src="require(`@/assets/works/${work.img}.jpg`)" />
+              <div class="work-hover"></div>
+              <h2 class="work-title">{{work.title}}</h2>
+              <p class="work-text">{{work.text}}</p>
+            </a>
+          </li>
+        </ul>
+      </div>
     </section>
   </div>
 </template>
@@ -60,11 +54,25 @@ import IconFrontend from "@/components/icons/FrontEnd.vue";
     IconFrontend
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  private skillArr: Array<{ title: string, text: string }> = [
+    { title: 'JS / ES6 / TS', text: '熟悉ES6語法設計，目前正用空閒時間研究typescript，使用TS+vue開發遊戲平台。' },
+    { title: 'VUE', text: '熟練Vue.js，router、vuex...等都十分了解，目前開發專案以Vue為主。' },
+    { title: 'CSS / SCSS', text: '目前所有專案皆使用SCSS開發，在樣式設計上大部分從功能作為區分的模組化設計。' },
+    { title: 'UI / UX', text: '過去曾設計公司的後台介面，主要偏向扁平化設計，在前端開發時會注意UX部分，希望能讓自己開發的產品有優良的使用體驗。' },
+    { title: 'PS / AI / XD', text: '會使用設計軟體，有網站版面及流程規劃經驗。' },
+  ];
+  private workArr: Array<{ title: string, text: string, url?: string, img: string }> = [
+    { title: 'TIC-TAC-TOE', text: '練習時，製作的井字遊戲。', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' }
+  ];
+  private linkTo(url: string) {
+    window.location.href = url;
+  }
+}
 </script>
 <style lang="scss">
 .section {
-  padding: 30px 0;
+  padding: 50px 0;
   box-sizing: border-box;
   @media (max-width: 500px) {
     flex-direction: column;
@@ -95,10 +103,13 @@ export default class Home extends Vue {}
 
   &-title {
     color: #eee;
+    font-weight: bold;
     font-size: 40px;
+    margin-bottom: 80px;
   }
   &-blue {
-    background: #090f18;
+    padding-bottom: 50px;
+    background: #070a0f;
   }
   @keyframes h1-show-helf {
     to {
@@ -108,6 +119,88 @@ export default class Home extends Vue {}
   @keyframes h1-show-full {
     to {
       width: 100%;
+    }
+  }
+}
+.work {
+  width: 25%;
+  box-sizing: border-box;
+  margin: 0 20px;
+  position: relative;
+  overflow: hidden;
+  &-group {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+  }
+  &-head {
+    padding-right: 40px;
+    font-size: 60px;
+    font-weight: bold;
+    color: #eee;
+    text-align: left;
+    line-height: 70px;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      right: 130px;
+      top: 50px;
+      border: 5px solid #fff;
+      transition: 0.3s;
+    }
+    &:hover {
+      &::before {
+        right: 40px;
+        border-left: 10px solid #fff;
+        border-top: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+      }
+    }
+  }
+  &-image {
+    display: block;
+    width: 100%;
+  }
+  &-title,
+  &-text {
+    position: absolute;
+    color: #fff;
+  }
+  &-title {
+    transition-duration: 0.3s;
+    font-size: 22px;
+    bottom: 10px;
+    right: 10px;
+    box-sizing: border-box;
+  }
+  &-text {
+    color: #eee;
+    right: 0;
+    bottom: -30px;
+    transition: 0.3s;
+  }
+  &-hover {
+    transition: background-color 0.3s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  &:hover {
+    .work {
+      &-hover {
+        background-image: none;
+        background-color: rgba(#000, 0.9);
+      }
+      &-title {
+        bottom: 150px;
+      }
+      &-text {
+        bottom: 130px;
+      }
     }
   }
 }

@@ -168,6 +168,10 @@ export default Vue.extend({
     text-align: right;
     font-size: 24px;
     color: #fff;
+    h2 {
+      font-size: 16px;
+      color: #ccc;
+    }
     p {
       margin-top: 10px;
     }

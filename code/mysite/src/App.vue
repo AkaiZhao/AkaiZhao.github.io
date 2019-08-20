@@ -92,6 +92,7 @@ export default class App extends Vue {
   padding-top: 40px;
   transition: 0.5s;
   border-bottom: 0px solid rgb(80, 80, 80);
+  z-index: 1;
   &-light {
     padding-top: 10px;
     padding-bottom: 10px;

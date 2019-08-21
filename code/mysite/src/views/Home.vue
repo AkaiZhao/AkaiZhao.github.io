@@ -24,12 +24,12 @@
         </ul>
       </div>
     </section>
-    <section class="section">
+    <section class="section section-work">
       <div class="container">
         <ul class="work-group">
           <li class="work work-head">
-            My
-            <br />woRKs
+            MY
+            <br />WORKs
           </li>
           <li class="work" v-for="work in workArr" :key="work.title">
             <a :href="work.url" target="_blank">
@@ -57,15 +57,15 @@ import IconFrontend from "@/components/icons/FrontEnd.vue";
 export default class Home extends Vue {
   private skillArr: Array<{ title: string, text: string }> = [
     { title: 'JS / ES6 / TS', text: '熟悉ES6語法設計，目前正用空閒時間研究typescript，使用TS+vue開發遊戲平台。' },
-    { title: 'VUE', text: '熟練Vue.js，router、vuex...等都十分了解，目前開發專案以Vue為主。' },
+    { title: 'VUE', text: '熟練Vue.js，router、vuex...等都十分了解，目前開發專案以Vue-CLI為主。' },
     { title: 'CSS / SCSS', text: '目前所有專案皆使用SCSS開發，在樣式設計上大部分從功能作為區分的模組化設計。' },
-    { title: 'UI / UX', text: '過去曾設計公司的後台介面，主要偏向扁平化設計，在前端開發時會注意UX部分，希望能讓自己開發的產品有優良的使用體驗。' },
+    { title: 'UX', text: '過去曾為公司的後台介面做優化改版，在前端開發時注重UX，希望能讓自己開發的產品好上手。' },
     { title: 'PS / AI / XD', text: '會使用設計軟體，有網站版面及流程規劃經驗。' },
   ];
   private workArr: Array<{ title: string, text: string, url?: string, img: string }> = [
-    { title: 'TIC-TAC-TOE', text: '練習時，製作的井字遊戲。', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' },
-    { title: 'GOMOKU', text: '研究CANVAS時製作的五子棋遊戲。', url: 'https://akaizhao.github.io/work/gomoku/', img: 'tic-tac-toe' },
-    { title: 'YOLOMOMENT', text: '職訓時與組員共同設計的餐廳網站。', url: 'https://akaizhao.github.io/work/yolomoment/', img: 'tic-tac-toe' },
+    { title: 'TIC-TAC-TOE', text: '練習時製作的井字遊戲', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' },
+    { title: 'GOMOKU', text: '研究CANVAS時製作的五子棋遊戲', url: 'https://akaizhao.github.io/work/gomoku/', img: 'gomoku' },
+    { title: 'YOLOMOMENT', text: '職訓時與組員共同設計的餐廳網站', url: 'https://akaizhao.github.io/work/yolomoment/', img: 'yolomoment' },
   ];
   private linkTo(url: string) {
     window.location.href = url;
@@ -113,6 +113,9 @@ export default class Home extends Vue {
     padding-bottom: 50px;
     background: #070a0f;
   }
+  &-work {
+    background: #1a3a5a;
+  }
   @keyframes h1-show-helf {
     to {
       width: 50%;
@@ -136,28 +139,42 @@ export default class Home extends Vue {
     align-items: center;
   }
   &-head {
-    padding-right: 40px;
     font-size: 60px;
     font-weight: bold;
-    color: #eee;
+    color: #f9dc3f;
     text-align: left;
     line-height: 70px;
     position: relative;
+    transform: rotate(16.181deg) translate(80px, -15px);
     &::before {
       content: "";
       position: absolute;
-      right: 130px;
+      right: 195px;
       top: 50px;
-      border: 5px solid #fff;
+      border: 5px solid #f9dc3f;
+      transition: 0.3s;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      left: 100px;
+      top: 57px;
+      width: 0px;
+      height: 3px;
+      background-color: #f9dc3f;
       transition: 0.3s;
     }
     &:hover {
       &::before {
-        right: 40px;
-        border-left: 10px solid #fff;
+        right: 100px;
+        border-left: 5px solid #77bce7;
         border-top: 5px solid transparent;
         border-right: 5px solid transparent;
-        border-bottom: 5px solid transparent;
+        border-bottom: 5px solid #77bce7;
+      }
+      &::after {
+        width: 95px;
+        background-color: #77bce7;
       }
     }
   }
@@ -169,17 +186,18 @@ export default class Home extends Vue {
   &-text {
     position: absolute;
     color: #fff;
+    right: 10px;
   }
   &-title {
     transition-duration: 0.3s;
     font-size: 22px;
     bottom: 10px;
-    right: 10px;
+
     box-sizing: border-box;
   }
   &-text {
     color: #eee;
-    right: 0;
+    right: 14px;
     bottom: -30px;
     transition: 0.3s;
   }

@@ -150,7 +150,7 @@ export default class App extends Vue {
 }
 
 .footer {
-  padding: 30px 0;
+  padding: 30px 10px;
   padding-bottom: 50px;
   background-color: #111;
   box-sizing: border-box;

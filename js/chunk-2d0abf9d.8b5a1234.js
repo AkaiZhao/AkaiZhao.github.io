@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0abf9d"],{1822:function(e,n,t){"use strict";t.r(n);var c=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("div",{staticClass:"home container f-col"},[t("NameDeco",{attrs:{msg:"Works"}})],1)},a=[],o=(t("cadf"),t("551c"),t("f751"),t("097d"),t("0ccd")),s={name:"works",beforeCreate:function(){document.title="作品-Akai Zhao"},components:{NameDeco:o["a"]}},r=s,i=t("2877"),l=Object(i["a"])(r,c,a,!1,null,null,null);n["default"]=l.exports}}]);
-//# sourceMappingURL=chunk-2d0abf9d.8b5a1234.js.map

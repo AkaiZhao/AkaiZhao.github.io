@@ -76,7 +76,7 @@ export default class Home extends Vue {
 .section {
   padding: 50px 0;
   box-sizing: border-box;
-  @media (max-width: 500px) {
+  @media (max-width: 575.98px) {
     flex-direction: column;
     padding: 30px 10px;
   }
@@ -85,7 +85,7 @@ export default class Home extends Vue {
     overflow: hidden;
     animation: h1-show-helf 1.5s 4s both;
     margin-left: 60px;
-    @media (max-width: 500px) {
+    @media (max-width: 575.98px) {
       animation: h1-show-full 1.5s 4s both;
       margin-left: 0;
       text-align: center;
@@ -97,7 +97,7 @@ export default class Home extends Vue {
       font-size: 30px;
       line-height: 60px;
       white-space: nowrap;
-      @media (max-width: 500px) {
+      @media (max-width: 575.98px) {
         text-align: center;
       }
     }
@@ -221,6 +221,36 @@ export default class Home extends Vue {
       &-text {
         bottom: 120px;
       }
+    }
+  }
+  @media (max-width: 575.98px) {
+    width: 100%;
+    margin-bottom: 30px;
+    &-head {
+      font-size: 40px;
+      font-weight: bold;
+      color: #f9dc3f;
+      text-align: left;
+      line-height: 40px;
+      position: relative;
+      transform: none;
+      margin-bottom: 40px;
+      text-align: center;
+      &::before {
+        display: none;
+      }
+      &::after {
+        display: none;
+      }
+    }
+    &-hover {
+      transition: background-color 0.3s;
+      position: absolute;
+      background-color: rgba(#000, 0.6);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 }

@@ -1,9 +1,12 @@
 <template>
-  <div class>
+  <div class="home">
     <div class="bg bg-home"></div>
 
     <main class="main page-shadow page page-home">
-      <section class="container section section-home flex flex-aic flex-jcc">
+      <section
+        class="container section section-home flex flex-aic flex-jcc parallax"
+        ref="parallax_one"
+      >
         <div class="section-helf">
           <h1>
             你好，
@@ -40,6 +43,7 @@
             </a>
           </li>
         </ul>
+        <router-link to="work" class="btn btn-more">MORE</router-link>
       </div>
     </section>
   </div>
@@ -48,31 +52,58 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import IconFrontend from "@/components/icons/FrontEnd.vue";
-
+import WorkData from '@/data/work';
+import SkillData from '@/data/skill';
 @Component({
   components: {
     IconFrontend
   }
 })
 export default class Home extends Vue {
-  private skillArr: Array<{ title: string, text: string }> = [
-    { title: 'JS / ES6 / TS', text: '熟悉ES6語法設計，目前正用空閒時間研究typescript，使用TS+vue開發遊戲平台。' },
-    { title: 'VUE', text: '熟練Vue.js，router、vuex...等都十分了解，目前開發專案以Vue-CLI為主。' },
-    { title: 'CSS / SCSS', text: '目前所有專案皆使用SCSS開發，在樣式設計上大部分從功能作為區分的模組化設計。' },
-    { title: 'UX', text: '過去曾為公司的後台介面做優化改版，在前端開發時注重UX，希望能讓自己開發的產品好上手。' },
-    { title: 'PS / AI / XD', text: '會使用設計軟體，有網站版面及流程規劃經驗。' },
-  ];
-  private workArr: Array<{ title: string, text: string, url?: string, img: string }> = [
-    { title: 'TIC-TAC-TOE', text: '練習時製作的井字遊戲', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' },
-    { title: 'GOMOKU', text: '研究CANVAS時製作的五子棋遊戲', url: 'https://akaizhao.github.io/work/gomoku/', img: 'gomoku' },
-    { title: 'YOLOMOMENT', text: '職訓時與組員共同設計的餐廳網站', url: 'https://akaizhao.github.io/work/yolomoment/', img: 'yolomoment' },
-  ];
+  get skillArr() {
+    return SkillData;
+  }
+  get workArr() {
+    return WorkData;
+  }
+  private interval: number = Date.now();
+
   private linkTo(url: string) {
     window.location.href = url;
   }
+  private mounted() {
+    window.addEventListener('mousemove', this.moveEvt)
+  }
+  private beforeDestroy() {
+    window.removeEventListener('mousemove', this.moveEvt)
+  }
+  private moveEvt(e: MouseEvent): any {
+    this.throttle(this.parallax, e, this.$refs.parallax_one)
+  }
+
+  private parallax() {
+    const e: MouseEvent = arguments[0];
+    const el: HTMLElement = arguments[1];
+    const w: Position = { x: window.innerWidth, y: window.innerHeight }
+    const move: Position = { x: (e.x - w.x) / 30 + 10, y: (e.y - w.y) / 30 };
+    el.style.transform = `translate(${move.x}px,${move.y}px)`
+
+  }
+  private throttle(fn: any, ...arg: any[]): any {
+    if (Date.now() - this.interval < 16) { return; }
+    this.interval = Date.now();
+    fn.apply(this, arg);
+  }
+}
+interface Position {
+  x: number;
+  y: number;
 }
 </script>
 <style lang="scss">
+.parallax {
+  transition: 0.1s;
+}
 .section {
   padding: 50px 0;
   box-sizing: border-box;
@@ -127,130 +158,133 @@ export default class Home extends Vue {
     }
   }
 }
-.work {
-  width: calc(25% - 20px);
-  box-sizing: border-box;
-  margin: 0 10px;
-  position: relative;
-  overflow: hidden;
-  &-group {
-    flex-wrap: wrap;
-    display: flex;
-    align-items: center;
-  }
-  &-head {
-    font-size: 60px;
-    font-weight: bold;
-    color: #f9dc3f;
-    text-align: left;
-    line-height: 70px;
-    position: relative;
-    transform: rotate(16.181deg) translate(80px, -15px);
-    &::before {
-      content: "";
-      position: absolute;
-      right: 195px;
-      top: 50px;
-      border: 5px solid #f9dc3f;
-      transition: 0.3s;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      left: 100px;
-      top: 57px;
-      width: 0px;
-      height: 3px;
-      background-color: #f9dc3f;
-      transition: 0.3s;
-    }
-    &:hover {
-      &::before {
-        right: 100px;
-        border-left: 5px solid #77bce7;
-        border-top: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-bottom: 5px solid #77bce7;
-      }
-      &::after {
-        width: 95px;
-        background-color: #77bce7;
-      }
-    }
-  }
-  &-image {
-    display: block;
-    width: 100%;
-  }
-  &-title,
-  &-text {
-    position: absolute;
-    color: #fff;
-    right: 10px;
-  }
-  &-title {
-    transition-duration: 0.3s;
-    font-size: 22px;
-    bottom: 10px;
-
+.home {
+  .work {
+    width: calc(25% - 20px);
     box-sizing: border-box;
-  }
-  &-text {
-    color: #eee;
-    right: 14px;
-    bottom: -30px;
-    transition: 0.3s;
-  }
-  &-hover {
-    transition: background-color 0.3s;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  &:hover {
-    .work {
-      &-hover {
-        background-image: none;
-        background-color: rgba(#000, 0.9);
-      }
-      &-title {
-        bottom: 140px;
-      }
-      &-text {
-        bottom: 120px;
-      }
+    margin: 0 10px;
+    position: relative;
+    overflow: hidden;
+    &-group {
+      margin-bottom: 80px;
+      flex-wrap: wrap;
+      display: flex;
+      align-items: center;
     }
-  }
-  @media (max-width: 575.98px) {
-    width: 100%;
-    margin-bottom: 30px;
     &-head {
-      font-size: 40px;
+      font-size: 60px;
       font-weight: bold;
       color: #f9dc3f;
       text-align: left;
-      line-height: 40px;
+      line-height: 70px;
       position: relative;
-      transform: none;
-      margin-bottom: 40px;
-      text-align: center;
+      transform: rotate(16.181deg) translate(80px, -15px);
       &::before {
-        display: none;
+        content: "";
+        position: absolute;
+        right: 195px;
+        top: 50px;
+        border: 5px solid #f9dc3f;
+        transition: 0.3s;
       }
       &::after {
-        display: none;
+        content: "";
+        position: absolute;
+        left: 100px;
+        top: 57px;
+        width: 0px;
+        height: 3px;
+        background-color: #f9dc3f;
+        transition: 0.3s;
       }
+      &:hover {
+        &::before {
+          right: 100px;
+          border-left: 5px solid #77bce7;
+          border-top: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-bottom: 5px solid #77bce7;
+        }
+        &::after {
+          width: 95px;
+          background-color: #77bce7;
+        }
+      }
+    }
+    &-image {
+      display: block;
+      width: 100%;
+    }
+    &-title,
+    &-text {
+      position: absolute;
+      color: #fff;
+      right: 10px;
+    }
+    &-title {
+      transition-duration: 0.3s;
+      font-size: 22px;
+      bottom: 10px;
+
+      box-sizing: border-box;
+    }
+    &-text {
+      color: #eee;
+      right: 14px;
+      bottom: -30px;
+      transition: 0.3s;
     }
     &-hover {
       transition: background-color 0.3s;
       position: absolute;
-      background-color: rgba(#000, 0.6);
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+    }
+    &:hover {
+      .work {
+        &-hover {
+          background-image: none;
+          background-color: rgba(#000, 0.9);
+        }
+        &-title {
+          bottom: 140px;
+        }
+        &-text {
+          bottom: 120px;
+        }
+      }
+    }
+    @media (max-width: 575.98px) {
+      width: 100%;
+      margin-bottom: 30px;
+      &-head {
+        font-size: 40px;
+        font-weight: bold;
+        color: #f9dc3f;
+        text-align: left;
+        line-height: 40px;
+        position: relative;
+        transform: none;
+        margin-bottom: 40px;
+        text-align: center;
+        &::before {
+          display: none;
+        }
+        &::after {
+          display: none;
+        }
+      }
+      &-hover {
+        transition: background-color 0.3s;
+        position: absolute;
+        background-color: rgba(#000, 0.6);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

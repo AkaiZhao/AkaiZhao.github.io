@@ -113,3 +113,22 @@ a {
     border-radius: 5px;
   }
 }
+
+.btn {
+  margin-right: 10px;
+  margin-left: auto;
+  width: 200px;
+  display: block;
+  color: #fff;
+  font-size: 24px;
+  padding: 10px;
+  transition: 0.1s;
+  border: {
+    width: 1px;
+    color: #fff;
+    style: solid;
+  }
+  &:hover {
+    background-color: rgba(#fff, 0.3);
+  }
+}

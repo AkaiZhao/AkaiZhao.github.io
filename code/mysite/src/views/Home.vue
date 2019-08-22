@@ -21,8 +21,8 @@
       <div class="container">
         <ul class="card-group flex flex-warp">
           <li class="card" v-for="skill in skillArr" :key="skill.title">
-            <h4 class="card-title">{{skill.title}}</h4>
-            <p class="card-text">{{skill.text}}</p>
+            <h4 class="card-title">{{ skill.title }}</h4>
+            <p class="card-text">{{ skill.text }}</p>
           </li>
         </ul>
       </div>
@@ -38,8 +38,8 @@
             <a :href="work.url" target="_blank">
               <img class="work-image" :src="require(`@/assets/works/${work.img}.jpg`)" />
               <div class="work-hover"></div>
-              <h2 class="work-title">{{work.title}}</h2>
-              <p class="work-text">{{work.text}}</p>
+              <h2 class="work-title">{{ work.title }}</h2>
+              <p class="work-text">{{ work.text }}</p>
             </a>
           </li>
         </ul>
@@ -52,8 +52,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import IconFrontend from "@/components/icons/FrontEnd.vue";
-import WorkData from '@/data/work';
-import SkillData from '@/data/skill';
+import WorkData from "@/data/work";
+import SkillData from "@/data/skill";
 @Component({
   components: {
     IconFrontend
@@ -72,25 +72,26 @@ export default class Home extends Vue {
     window.location.href = url;
   }
   private mounted() {
-    window.addEventListener('mousemove', this.moveEvt)
+    window.addEventListener("mousemove", this.moveEvt);
   }
   private beforeDestroy() {
-    window.removeEventListener('mousemove', this.moveEvt)
+    window.removeEventListener("mousemove", this.moveEvt);
   }
   private moveEvt(e: MouseEvent): any {
-    this.throttle(this.parallax, e, this.$refs.parallax_one)
+    this.throttle(this.parallax, e, this.$refs.parallax_one);
   }
 
   private parallax() {
     const e: MouseEvent = arguments[0];
     const el: HTMLElement = arguments[1];
-    const w: Position = { x: window.innerWidth, y: window.innerHeight }
+    const w: Position = { x: window.innerWidth, y: window.innerHeight };
     const move: Position = { x: (e.x - w.x) / 30 + 10, y: (e.y - w.y) / 30 };
-    el.style.transform = `translate(${move.x}px,${move.y}px)`
-
+    el.style.transform = `translate(${move.x}px,${move.y}px)`;
   }
   private throttle(fn: any, ...arg: any[]): any {
-    if (Date.now() - this.interval < 16) { return; }
+    if (Date.now() - this.interval < 100) {
+      return;
+    }
     this.interval = Date.now();
     fn.apply(this, arg);
   }

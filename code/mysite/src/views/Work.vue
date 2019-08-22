@@ -10,8 +10,8 @@
                 <img class="work-image" :src="require(`@/assets/works/${work.img}.jpg`)" />
               </div>
               <div class="work-bottom">
-                <h2 class="work-title">{{work.title}}</h2>
-                <p class="work-text">{{work.text}}</p>
+                <h2 class="work-title">{{ work.title }}</h2>
+                <p class="work-text">{{ work.text }}</p>
               </div>
             </a>
           </li>
@@ -21,27 +21,35 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue';
-import WorkData from '@/data/work';
+import Vue from "vue";
+import WorkData from "@/data/work";
 export default class Work extends Vue {
-  // private workArr: Array<{ title: string, text: string, url?: string, img: string }> = [
-  //   { title: 'TIC-TAC-TOE', text: '練習時製作的井字遊戲', url: 'https://akaizhao.github.io/work/tictactoe/', img: 'tic-tac-toe' },
-  //   { title: 'GOMOKU', text: '研究CANVAS時製作的五子棋遊戲', url: 'https://akaizhao.github.io/work/gomoku/', img: 'gomoku' },
-  //   { title: 'YOLOMOMENT', text: '職訓時與組員共同設計的餐廳網站', url: 'https://akaizhao.github.io/work/YoloMoment/', img: 'yolomoment' },
-  // ];
   get workArr() {
     return WorkData;
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .works {
   padding-top: 95px;
   background-color: rgb(44, 17, 2);
+  background-image: url("~@/assets/background/wood.jpg");
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  &-filter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(#000, 0.3);
+  }
   .section {
     min-height: 800px;
   }
   .work {
+    box-shadow: 0 8px 8px -5px #000;
     width: 30%;
     margin: 0 calc((100% / 3 - 30%) / 2);
     position: relative;
@@ -50,6 +58,7 @@ export default class Work extends Vue {
     padding: 2px;
     padding-bottom: 10px;
     border-radius: 3px;
+    margin-bottom: 60px;
     box-sizing: border-box;
     @media (max-width: 530px) {
       width: 100%;
@@ -67,9 +76,7 @@ export default class Work extends Vue {
       border-bottom: 2px solid rgb(175, 175, 175);
     }
     &-bottom {
-      // padding-bottom: 10px;
       width: 100%;
-      height: 0px;
       transition: 0.3s;
       overflow: hidden;
     }
@@ -83,14 +90,12 @@ export default class Work extends Vue {
       font-size: 18px;
       font-weight: bold;
     }
-    // &:hover {
-    //   .work {
-    //     &-bottom {
-    //       height: 60px;
-    //       background-color: #eee;
-    //     }
-    //   }
-    // }
+    &:hover {
+      .work-bottom {
+        height: 60px;
+        background-color: #eee;
+      }
+    }
   }
 }
 </style>

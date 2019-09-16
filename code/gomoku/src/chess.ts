@@ -1,5 +1,3 @@
-import { WindowData, ChessData, Counter } from './interfaces';
-
 export default class {
   private data: number[][] = [];
   private isWhite: boolean = false;

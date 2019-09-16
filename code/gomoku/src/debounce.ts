@@ -14,7 +14,7 @@ var throttle = function(
   var curr = +new Date(), //当前事件
     last_call = 0,
     last_exec = 0,
-    timer: NodeJS.Timeout = null,
+    timer: any = null,
     diff, //时间差
     context: string, //上下文
     args: IArguments,

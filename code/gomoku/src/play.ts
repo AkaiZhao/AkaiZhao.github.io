@@ -1,4 +1,4 @@
-import drawMap from './drawMap';
+// import drawMap from './drawMap';
 
 export default function(
   e: MouseEvent,
